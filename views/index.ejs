@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/mycss/game.css">
+</head>
+<body>
+
+  <div id="game">
+    <div id="status"></div>
+
+    <!-- TELA DE TÍTULO (Exibida por padrão) -->
+    <div id="title-screen" class="screen active">
+      <h1 class="game-title">JOGO DE DECISÕES</h1>
+      <div class="title-buttons">
+        <button class="choice-btn" onclick="startGame()">Novo Jogo</button>
+        <button class="choice-btn" onclick="loadGameFromTitle()">Carregar Jogo</button>
+      </div>
+    </div>
+
+    <!-- TELA DO JOGO (Começa oculta) -->
+    <div id="game-screen" class="screen">
+      <div id="scene">
+        <img id="background" src="" alt=""> 
+        <img id="character" src="" alt="">
+      </div>
+
+      <div id="textbox">
+        <div id="speaker"></div>
+        <div id="text"></div>
+        <div id="choices"></div>
+      </div>
+
+      <div id="menu">
+        <button class="menu-btn" onclick="saveGame()">Salvar</button>
+        <button class="menu-btn" onclick="loadGame()">Carregar</button>
+        <button class="menu-btn" onclick="restartGame()">Menu Inicial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts do Cliente -->
+  <script src="/javascript/story.js"></script>
+  <script src="/javascript/engine.js"></script>
+</body>
+</html>
