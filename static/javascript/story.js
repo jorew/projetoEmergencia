@@ -13,7 +13,7 @@ const story = {
   
     teste: {
       speaker: "Narrador",
-      background: null,
+      background: "../cenarios/sopaz.jpg",
       character: null,
       text: "Você acorda em um quarto escuro. Há duas portas à sua frente.O que fazer?",
       choices: [
