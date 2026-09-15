@@ -6,10 +6,22 @@ const story = {
       text: "Você acorda em um quarto escuro. Há duas portas à sua frente.",
       choices: [
         { text: "Abrir a porta da esquerda", next: "esquerda" },
-        { text: "Abrir a porta da direita", next: "direita" }
+        { text: "Abrir a porta da direita", next: "direita" },
+        { text: "Quero testar", next: "teste" }
       ]
     },
   
+    teste: {
+      speaker: "Narrador",
+      background: null,
+      character: null,
+      text: "Você acorda em um quarto escuro. Há duas portas à sua frente.O que fazer?",
+      choices: [
+        { text: "Abrir a volta", next: "esquerda" },
+        { text: "Abrir a reviravolota", next: "direita" }
+      ]
+    },
+
     esquerda: {
       speaker: "Narrador",
       background: null,
