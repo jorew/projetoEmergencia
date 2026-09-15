@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 // Servir arquivos estáticos (CSS, JS do cliente, imagens)
 app.use(express.static(path.join(__dirname, 'static')));
 
+
 // Importa e usa as rotas
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
@@ -20,8 +21,5 @@ app.use((req, res, next) => {
   res.status(404).render('error', { message: 'Página não encontrada' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
 module.exports = app;
+
