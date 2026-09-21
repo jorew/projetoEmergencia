@@ -63,6 +63,34 @@
     width: 280px;
   }
   
+  #inventory-bar {
+    background: #0f3460;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 2px solid #e94560;
+    font-size: 13px;
+    color: #eee;
+  }
+  
+  #inventory-items {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .item-badge {
+    background: #e94560;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+  
+
+
   /* TELA DO JOGO */
   #scene {
     flex: 1;

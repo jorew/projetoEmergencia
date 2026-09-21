@@ -312,6 +312,29 @@ function restartGame() {
 }
 
 // ====================== MOTOR DAS CENAS ======================
+
+// Atualiza a barra visual do inventário
+function updateInventoryUI() {
+  const container = document.getElementById("inventory-items");
+    if (!container) return;
+      
+        container.innerHTML = "";
+
+          // Mapeamento de flags para nomes visíveis dos itens
+            const itemNames = {
+                tem_chave: "🔑 Chave de Ferro"
+                  };
+
+                    Object.keys(state.flags).forEach(flag => {
+                        if (state.flags[flag] && itemNames[flag]) {
+                              const badge = document.createElement("span");
+                                    badge.className = "item-badge";
+                                          badge.textContent = itemNames[flag];
+                                                container.appendChild(badge);
+                                                    }
+                                                      });
+                                                      }
+
 function showScene(id, resetIndex = true) {
   const scene = story[id];
   if (!scene) return;

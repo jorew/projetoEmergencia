@@ -39,7 +39,7 @@ const story = {
     
     ],
       choices: [
-        { text: "Pegar a chave", next: "pegou_chave", flag: "tem_chave" },
+        { text: "Pegar a chave", next: "pegou_chave", flag: "chave" },
         { text: "Correr pro quarto e voltar", next: "start" }
       ]
     },
@@ -62,7 +62,7 @@ const story = {
       text: "Você agora possui a chave. O que deseja fazer?",
       choices: [
         { text: "Voltar para o quarto", next: "start" },
-        { text: "Tentar a porta trancada (final)", next: "final_chave", requires: "tem_chave" }
+        { text: "Tentar a porta trancada (final)", next: "final_chave", requires: "chave" }
       ]
     },
   
@@ -72,7 +72,7 @@ const story = {
       character: null,
       text: "Eu sabia que você viria... Você tem a chave?",
       choices: [
-        { text: "Sim, eu tenho", next: "final_chave", requires: "tem_chave" },
+        { text: "Sim, eu tenho", next: "final_chave", requires: "chave" },
         { text: "Não tenho", next: "final_sem_chave" }
       ]
     },
