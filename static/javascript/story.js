@@ -31,10 +31,16 @@ const story = {
       speaker: "Narrador",
       background: null,
       character: null,
-      text: "Você encontra uma chave antiga e um bilhete: 'Confie em quem te observa'.",
+      text: [
+        {text: "Você encontra uma chave antiga e um bilhete: 'Confie em quem te observa'.", emotion: "scared" },
+        {text: "A figura é apenas estranha . . .", emotion: "angry"},
+        {text: "Porém o mistério é o que mais da medo.", emotion: "happy"},
+        {text: "O que você faz?", emotion: "sad"}
+    
+    ],
       choices: [
         { text: "Pegar a chave", next: "pegou_chave", flag: "tem_chave" },
-        { text: "Ignorar e voltar", next: "start" }
+        { text: "Correr pro quarto e voltar", next: "start" }
       ]
     },
   
