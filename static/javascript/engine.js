@@ -159,7 +159,7 @@ function showScene(id, resetIndex = true) {
 }
 
 // Renderiza a fala atual e gerencia a exibição das escolhas
-function renderDialogue() {
+/* function renderDialogue() {
   const scene = story[state.current];
   const choicesDiv = document.getElementById("choices");
   const textDiv = document.getElementById("text");
@@ -205,6 +205,44 @@ function advanceDialogue() {
 
 // Vincula o evento de clique na caixa de texto
 document.getElementById("textbox").addEventListener("click", advanceDialogue);
+*/
+
+function renderDialogue() {
+  const scene = story[state.current];
+  const choicesDiv = document.getElementById("choices");
+  const textDiv = document.getElementById("text");
+
+  const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
+  const currentItem = dialogueList[state.textIndex];
+
+  // Extrai o texto e a emoção (suporta tanto string simples quanto objeto)
+  const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
+  const currentEmotion = typeof currentItem === 'object' ? currentItem.emotion : (scene.emotion || 'neutral');
+
+  // Reset de Animações / Classes de Sentimento
+  textDiv.className = ""; // Limpa emoções anteriores
+  if (currentEmotion && currentEmotion !== 'neutral') {
+    textDiv.classList.add(`emotion-${currentEmotion}`);
+  }
+
+  // Prepara a digitação
+  choicesDiv.innerHTML = "";
+  clearInterval(typeWriterTimer);
+  
+  textDiv.textContent = "";
+  let charIndex = 0;
+  isTyping = true;
+
+  typeWriterTimer = setInterval(() => {
+    if (charIndex < currentText.length) {
+      textDiv.textContent += currentText.charAt(charIndex);
+      charIndex++;
+    } else {
+      finishTyping(dialogueList, scene, choicesDiv);
+    }
+  }, 30);
+}
+
 
 // ====================== SAVE / LOAD ======================
 function saveGame() {

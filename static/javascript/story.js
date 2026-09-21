@@ -4,11 +4,11 @@ const story = {
       background: null,
       character: null,
       text: [
-        "Você acorda em um quarto escuro. Há duas portas à sua frente.",
-        "Você repara que aquelas portas não existiam ali antes",
-        "Talvez você esteja em um sonho",
-        "Ou talvez, um pesadelo",
-        "O que você faz?" ],
+        {text: "Você acorda em um quarto escuro. Há duas portas à sua frente.", emotion: "neutral" },
+        {text: "Você repara que aquelas portas não existiam ali antes", emotion: "neutral" },
+        {text: "Talvez você esteja em um sonho", emotion: "neutral" },
+        {text: "Ou talvez, um pesadelo", emotion:"neutral" },
+        {text: "O que você faz?", emotion:"" } ],
       choices: [
         { text: "Abrir a porta da esquerda", next: "esquerda" },
         { text: "Abrir a porta da direita", next: "direita" },

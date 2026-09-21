@@ -124,6 +124,66 @@
     }
   }
 
+  /* ================= EFEITOS DE SENTIMENTO ================= */
+
+  /* Neutro / Padrão: Texto limpo, sem trepidações ou flutuações */
+.emotion-neutral {
+  color: #eee !important;
+  opacity: 1;
+  animation: fadeInText 0.3s ease-out;
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Raiva / Tensão: Trepidação rápida em vermelho */
+.emotion-angry {
+  color: #ff4757 !important;
+  animation: shake 0.15s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+  0% { transform: translate(2px, 1px); }
+  50% { transform: translate(-2px, -1px); }
+  100% { transform: translate(1px, -2px); }
+}
+
+/* Medo / Mistério: Pulso sombrio em azul escuro/pálido */
+.emotion-scared {
+  color: #a4b0be !important;
+  animation: pulse-dark 1.2s infinite alternate;
+}
+
+@keyframes pulse-dark {
+  0% { opacity: 0.6; transform: scale(0.99); }
+  100% { opacity: 1; transform: scale(1.01); }
+}
+
+/* Alegria / Animação: Flutuação suave em amarelo/dourado */
+.emotion-happy {
+  color: #eccc68 !important;
+  animation: bounce 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+/* Tristeza / Desânimo: Desbotado e caindo lentamente */
+.emotion-sad {
+  color: #70a1ff !important;
+  opacity: 0.75;
+  animation: drop-fade 0.6s ease-out forwards;
+}
+
+@keyframes drop-fade {
+  from { transform: translateY(-5px); opacity: 0; }
+  to { transform: translateY(0); opacity: 0.75; }
+}
+
+
   /* Cursor retrô estilo terminal/pixel art */
 #text::after {
   content: '▋';
