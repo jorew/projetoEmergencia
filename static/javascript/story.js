@@ -4,6 +4,10 @@ const story = {
       background: null,
       character: null,
       text: "Você acorda em um quarto escuro. Há duas portas à sua frente.",
+      text: "Você repara que aquelas portas não existiam ali antes",
+      text: "Talvez você esteja em um sonho",
+      text: "Ou talvez, um pesadelo",
+      text: "O que você faz?",
       choices: [
         { text: "Abrir a porta da esquerda", next: "esquerda" },
         { text: "Abrir a porta da direita", next: "direita" },
