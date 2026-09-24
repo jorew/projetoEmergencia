@@ -283,3 +283,87 @@
     display: none;
     z-index: 10;
   }
+
+
+
+
+
+
+/* Botão do Mapa */
+.map-btn {
+  background: #2b2b36;
+  color: #fff;
+  border: 1px solid #e94560;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Modal do Mapa */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #1a1a2e;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+  max-width: 600px;
+  width: 90%;
+  border: 1px solid #e94560;
+  text-align: center;
+}
+
+.close-btn {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Container do Mapa */
+.map-container {
+  position: relative;
+  width: 100%;
+  margin-top: 15px;
+}
+
+#map-image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Pontos Clicáveis no Mapa */
+.map-point {
+  position: absolute;
+  background: #e94560;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s, background 0.2s;
+  box-shadow: 0 0 8px rgba(233, 69, 96, 0.6);
+}
+
+.map-point:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: #ff6b81;
+}

@@ -47,6 +47,35 @@
     </div>
   </div>
 
+  <!-- Dentro do #game-screen (pode ser junto dos botões de Save/Load) -->
+<button onclick="openMap()" class="map-btn">🗺️ Mapa</button>
+
+<!-- Modal do Mapa Interativo -->
+<div id="map-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeMap()">&times;</span>
+    <h3>Selecione um Destino</h3>
+    
+    <div class="map-container">
+      <!-- Imagem do Mapa de Fundo -->
+      <img src="/images/map.jpg" id="map-image" alt="Mapa da Cidade">
+      
+      <!-- Pontos de Interesse Clicáveis (Hotspots) -->
+      <button class="map-point" style="top: 30%; left: 25%;" onclick="travelTo('quarto')">
+        📍 Quarto
+      </button>
+      
+      <button class="map-point" style="top: 55%; left: 60%;" onclick="travelTo('corredor')">
+        📍 Corredor
+      </button>
+      
+      <button class="map-point" style="top: 75%; left: 40%;" onclick="travelTo('jardim')">
+        📍 Jardim
+      </button>
+    </div>
+  </div>
+</div>
+
   <!-- Scripts do Cliente -->
   <script src="/javascript/story.js"></script>
   <script src="/javascript/engine.js"></script>
