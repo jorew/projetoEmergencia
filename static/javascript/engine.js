@@ -237,55 +237,21 @@ function travelTo(sceneId) {
   showScene(sceneId);
 }
 
-// ====================== SAVE / LOAD POR SLOTS ======================
+// ====================== CORREÇÃO DO SAVE / LOAD NA TELA DE TÍTULO ======================
+
 function openSaveLoadModal(mode) {
   currentSaveMode = mode;
   const titleEl = document.getElementById("saveload-title");
   if (titleEl) titleEl.textContent = mode === "save" ? "Salvar Jogo" : "Carregar Jogo";
   
+  // Se estivermos a abrir o Load a partir da tela de título,
+  // mudamos primeiro para a tela de jogo para o modal sobrepor a interface correta.
+  if (mode === "load") {
+    switchScreen("game-screen");
+  }
+
   renderSaveSlots();
   openModal("saveload-modal");
-}
-
-function getSavedSlots() {
-  const data = localStorage.getItem("vn_slots_save");
-  return data ? JSON.parse(data) : {};
-}
-
-function renderSaveSlots() {
-  const container = document.getElementById("slots-grid");
-  if (!container) return;
-  
-  container.innerHTML = "";
-  const slots = getSavedSlots();
-
-  for (let i = 1; i <= 8; i++) {
-    const slotData = slots[i];
-    const slotDiv = document.createElement("div");
-    slotDiv.className = "save-slot";
-
-    if (slotData) {
-      slotDiv.innerHTML = `
-        <div class="slot-number">${i}</div>
-        <div class="slot-info">
-          <div class="slot-scene">${slotData.sceneName || 'Cena ' + slotData.current}</div>
-          <div class="slot-date">${slotData.date}</div>
-        </div>
-        <span class="slot-delete" onclick="deleteSlot(event, ${i})">✖</span>
-      `;
-      slotDiv.onclick = () => handleSlotClick(i, slotData);
-    } else {
-      slotDiv.innerHTML = `
-        <div class="slot-number">${i}</div>
-        <div class="slot-info">
-          <div class="slot-scene" style="color:#666;">-- VAZIO --</div>
-        </div>
-      `;
-      slotDiv.onclick = () => handleSlotClick(i, null);
-    }
-
-    container.appendChild(slotDiv);
-  }
 }
 
 function handleSlotClick(slotIndex, slotData) {
@@ -305,7 +271,9 @@ function handleSlotClick(slotIndex, slotData) {
     closeModal("saveload-modal");
     showStatus("Jogo Salvo no Slot " + slotIndex);
   } else {
+    // MODO LOAD
     if (slotData) {
+      // Slot com dados válidos: carrega o progresso salvo
       state = { ...slotData };
       closeModal("saveload-modal");
       
@@ -313,26 +281,12 @@ function handleSlotClick(slotIndex, slotData) {
       if (sidebar) sidebar.classList.remove("active");
       
       switchScreen("game-screen");
-      showScene(state.current, false); // Restaura mantendo o índice da fala
+      showScene(state.current, false); // Restaura na cena guardada
       showStatus("Jogo Carregado do Slot " + slotIndex);
     } else {
-      showStatus("Slot vazio!");
+      // Slot VAZIO: não faz nada, apenas avisa o utilizador e interrompe o fluxo
+      showStatus("Este slot está vazio!");
+      return; 
     }
   }
-}
-
-function deleteSlot(event, slotIndex) {
-  event.stopPropagation();
-  const slots = getSavedSlots();
-  delete slots[slotIndex];
-  localStorage.setItem("vn_slots_save", JSON.stringify(slots));
-  renderSaveSlots();
-}
-
-function showStatus(msg) {
-  const el = document.getElementById("status");
-  if (!el) return;
-  el.textContent = msg;
-  el.style.display = "block";
-  setTimeout(() => el.style.display = "none", 1800);
 }
