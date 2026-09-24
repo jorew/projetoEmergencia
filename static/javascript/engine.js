@@ -194,6 +194,31 @@ function advanceDialogue() {
 // Evento de clique na caixa de texto
 document.getElementById("textbox").addEventListener("click", advanceDialogue);
 
+// Abrir e Fechar Modal do Mapa
+function openMap() {
+  document.getElementById("map-modal").style.display = "flex";
+}
+
+function closeMap() {
+  document.getElementById("map-modal").style.display = "none";
+}
+
+// Viajar para a cena escolhida pelo mapa
+function travelTo(sceneId) {
+  closeMap();
+  showScene(sceneId);
+}
+
+
+
+
+
+
+
+
+
+
+
 // ====================== SAVE / LOAD ======================
 function saveGame() {
   localStorage.setItem("meu_jogo_save", JSON.stringify(state));
