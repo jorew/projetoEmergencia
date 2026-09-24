@@ -1,148 +1,219 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    image-rendering: pixelated;
-  }
-  
-  body {
-    background: #1a1a2e;
-    color: #eee;
-    font-family: 'Courier New', monospace;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-  
-  #game {
-    width: 100vw;
-    max-width: 1000px;
-    height: 100vh;
-    max-height: 850px;
-    background: #16213e;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 4px solid #0f3460;
-  }
-  
-  /* GERENCIAMENTO DE TELAS */
-  .screen {
-    display: none;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-  }
-  
-  .screen.active {
-    display: flex;
-  }
-  
-  /* TELA DE TÍTULO */
-  #title-screen {
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-    background: #0f3460;
-    text-align: center;
-  }
-  
-  .game-title {
-    color: #e94560;
-    font-size: 36px;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px #1a1a2e;
-  }
-  
-  .title-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 280px;
-  }
-  
-  #inventory-bar {
-    background: #0f3460;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 2px solid #e94560;
-    font-size: 13px;
-    color: #eee;
-  }
-  
-  #inventory-items {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .item-badge {
-    background: #e94560;
-    color: #fff;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  image-rendering: pixelated;
+}
 
+body {
+  background: #1a1a2e;
+  color: #eee;
+  font-family: 'Courier New', monospace;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-  /* TELA DO JOGO */
-  #scene {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    background: #0f3460;
-  }
-  
-  #background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    image-rendering: pixelated;
-    z-index: 1;
-  }
-  
-  #character {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    max-height: 75%;
-    max-width: 90%;
-    image-rendering: pixelated;
-    z-index: 2;
-    display: none;
-  }
-  
-  #textbox {
-    background: rgba(0, 0, 0, 0.85);
-    padding: 16px;
-    min-height: 140px;
-    border-top: 3px solid #e94560;
-  }
-  
-  #speaker {
-    color: #e94560;
-    font-weight: bold;
-    margin-bottom: 8px;
-    font-size: 14px;
-  }
-  
-  #text {
-    font-size: 15px;
-    line-height: 1.5;
-    min-height: 60px;
-  }
+#game {
+  width: 100vw;
+  max-width: 1000px;
+  height: 100vh;
+  max-height: 850px;
+  background: #16213e;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #0f3460;
+}
 
-  /* ================= EFEITOS DE SENTIMENTO ================= */
+/* GERENCIAMENTO DE TELAS */
+.screen {
+  display: none;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
 
-  /* Neutro / Padrão: Texto limpo, sem trepidações ou flutuações */
+.screen.active {
+  display: flex;
+}
+
+/* TELA DE TÍTULO */
+#title-screen {
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  background: #0f3460;
+  text-align: center;
+}
+
+.game-title {
+  color: #e94560;
+  font-size: 36px;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px #1a1a2e;
+}
+
+.title-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 280px;
+}
+
+/* ================= BARRA LATERAL (SIDEBAR) ================= */
+#sidebar-toggle {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 90;
+  background: #0f3460;
+  color: #fff;
+  border: 2px solid #e94560;
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#sidebar-toggle:hover {
+  background: #e94560;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: -260px;
+  width: 240px;
+  height: 100%;
+  background: #1a1a2e;
+  border-right: 3px solid #e94560;
+  z-index: 100;
+  padding: 20px;
+  transition: left 0.3s ease;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e94560;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+.sidebar-header h3 {
+  font-size: 13px;
+  color: #e94560;
+  text-transform: uppercase;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-btn {
+  background: #0f3460;
+  color: #eee;
+  border: 1px solid #e94560;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sidebar-btn:hover {
+  background: #e94560;
+  color: #fff;
+}
+
+.sidebar-btn.danger {
+  border-color: #ff4757;
+  color: #ff4757;
+}
+
+.sidebar-btn.danger:hover {
+  background: #ff4757;
+  color: #fff;
+}
+
+.mt-15 { margin-top: 20px; }
+
+/* TELA DO JOGO */
+#scene {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #0f3460;
+}
+
+#background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+#character {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 75%;
+  max-width: 90%;
+  image-rendering: pixelated;
+  z-index: 2;
+  display: none;
+}
+
+#textbox {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 16px;
+  min-height: 140px;
+  border-top: 3px solid #e94560;
+  z-index: 10;
+  position: relative;
+  cursor: pointer;
+}
+
+#speaker {
+  color: #e94560;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+#text {
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 60px;
+}
+
+/* ================= EFEITOS DE SENTIMENTO ================= */
+
 .emotion-neutral {
   color: #eee !important;
   opacity: 1;
@@ -153,7 +224,7 @@
   from { opacity: 0; transform: translateY(2px); }
   to { opacity: 1; transform: translateY(0); }
 }
-/* Raiva / Tensão: Trepidação rápida em vermelho */
+
 .emotion-angry {
   color: #ff4757 !important;
   animation: shake 0.15s ease-in-out infinite alternate;
@@ -165,7 +236,6 @@
   100% { transform: translate(1px, -2px); }
 }
 
-/* Medo / Mistério: Pulso sombrio em azul escuro/pálido */
 .emotion-scared {
   color: #a4b0be !important;
   animation: pulse-dark 1.2s infinite alternate;
@@ -176,7 +246,6 @@
   100% { opacity: 1; transform: scale(1.01); }
 }
 
-/* Alegria / Animação: Flutuação suave em amarelo/dourado */
 .emotion-happy {
   color: #eccc68 !important;
   animation: bounce 0.5s ease-in-out infinite alternate;
@@ -187,7 +256,6 @@
   100% { transform: translateY(-3px); }
 }
 
-/* Tristeza / Desânimo: Desbotado e caindo lentamente */
 .emotion-sad {
   color: #70a1ff !important;
   opacity: 0.75;
@@ -199,8 +267,7 @@
   to { transform: translateY(0); opacity: 0.75; }
 }
 
-
-  /* Cursor retrô estilo terminal/pixel art */
+/* Cursor retrô */
 #text::after {
   content: '▋';
   display: inline-block;
@@ -214,96 +281,54 @@
   50% { opacity: 0; }
 }
 
-  
-  #choices {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  
-  .choice-btn {
-    background: #0f3460;
-    color: white;
-    border: 2px solid #e94560;
-    padding: 12px;
-    font-family: inherit;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center;
-    transition: 0.15s;
-    animation: fadeIn 0.3s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  #choices .choice-btn {
-    text-align: left;
-  }
-  
-  .choice-btn:active, .choice-btn:hover {
-    background: #e94560;
-  }
-  
-  #menu {
-    display: flex;
-    gap: 6px;
-    padding: 8px;
-    background: #0f3460;
-    border-top: 2px solid #1a1a2e;
-  }
-  
-  .menu-btn {
-    flex: 1;
-    background: #16213e;
-    color: #eee;
-    border: 1px solid #e94560;
-    padding: 8px;
-    font-size: 12px;
-    font-family: inherit;
-    cursor: pointer;
-  }
-  
-  .menu-btn:active, .menu-btn:hover {
-    background: #e94560;
-  }
-  
-  #status {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    padding: 6px 14px;
-    border-radius: 4px;
-    font-size: 13px;
-    display: none;
-    z-index: 10;
-  }
-
-
-
-
-
-
-/* Botão do Mapa */
-.map-btn {
-  background: #2b2b36;
-  color: #fff;
-  border: 1px solid #e94560;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+#choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-/* Modal do Mapa */
+.choice-btn {
+  background: #0f3460;
+  color: white;
+  border: 2px solid #e94560;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.15s;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.choice-btn:active, .choice-btn:hover {
+  background: #e94560;
+}
+
+#status {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.8);
+  padding: 6px 14px;
+  border: 1px solid #e94560;
+  border-radius: 4px;
+  font-size: 13px;
+  display: none;
+  z-index: 200;
+}
+
+/* ================= MODAIS EM GERAL ================= */
 .modal {
-  display: none; 
+  display: none !important; 
   position: fixed;
-  z-index: 100;
+  z-index: 110;
   left: 0;
   top: 0;
   width: 100%;
@@ -313,6 +338,10 @@
   align-items: center;
 }
 
+.modal.active {
+  display: flex !important;
+}
+
 .modal-content {
   background: #1a1a2e;
   padding: 20px;
@@ -320,7 +349,7 @@
   position: relative;
   max-width: 600px;
   width: 90%;
-  border: 1px solid #e94560;
+  border: 2px solid #e94560;
   text-align: center;
 }
 
@@ -333,7 +362,70 @@
   cursor: pointer;
 }
 
-/* Container do Mapa */
+/* ================= PAINEL SAVE/LOAD (SLOTS ESTILO VN) ================= */
+.vn-saveload-box {
+  max-width: 750px;
+  width: 95%;
+}
+
+.saveload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.save-slot {
+  background: #0f3460;
+  border: 2px solid #16213e;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.save-slot:hover {
+  border-color: #e94560;
+  background: #16213e;
+}
+
+.slot-number {
+  font-size: 16px;
+  font-weight: bold;
+  color: #e94560;
+}
+
+.slot-info {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.slot-date {
+  font-size: 11px;
+  color: #aaa;
+}
+
+.slot-scene {
+  font-size: 13px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.slot-delete {
+  position: absolute;
+  top: 5px; right: 8px;
+  color: #ff4757;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* MAPA */
 .map-container {
   position: relative;
   width: 100%;
@@ -347,7 +439,6 @@
   display: block;
 }
 
-/* Pontos Clicáveis no Mapa */
 .map-point {
   position: absolute;
   background: #e94560;

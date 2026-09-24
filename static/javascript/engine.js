@@ -8,11 +8,30 @@ let state = {
 // Controle da animação de digitação (Typewriter)
 let typeWriterTimer = null;
 let isTyping = false;
+let currentSaveMode = "save"; // Define se o modal do slot está em modo "save" ou "load"
 
-// ====================== GERENCIAMENTO DE TELAS ======================
+// ====================== GERENCIAMENTO DE TELAS E SIDEBAR ======================
 function switchScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.toggle("active");
+}
+
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    if (modalId === "inventory-modal") renderInventoryModal();
+    modal.classList.add("active");
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.remove("active");
 }
 
 function startGame() {
@@ -21,21 +40,11 @@ function startGame() {
   showScene("start");
 }
 
-function loadGameFromTitle() {
-  const data = localStorage.getItem("meu_jogo_save");
-  if (data) {
-    state = JSON.parse(data);
-    switchScreen("game-screen");
-    showScene(state.current, false); // Mantém a frase exata em que parou
-    showStatus("Jogo carregado!");
-  } else {
-    showStatus("Nenhum save encontrado!");
-  }
-}
-
 function restartGame() {
   clearInterval(typeWriterTimer);
   isTyping = false;
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.remove("active");
   switchScreen("title-screen");
 }
 
@@ -46,7 +55,7 @@ function updateInventoryUI() {
   
   container.innerHTML = "";
 
-  // Mapeamento das flags ativas para nomes exibidos no painel
+  // Mapeamento das flags ativas para nomes exibidos
   const itemNames = {
     tem_chave: "🔑 Chave de Ferro"
   };
@@ -61,6 +70,32 @@ function updateInventoryUI() {
   });
 }
 
+function renderInventoryModal() {
+  const container = document.getElementById("inventory-items-container");
+  if (!container) return;
+  
+  container.innerHTML = "";
+
+  const itemNames = {
+    tem_chave: "🔑 Chave de Ferro"
+  };
+
+  let hasItems = false;
+  Object.keys(state.flags).forEach(flag => {
+    if (state.flags[flag] && itemNames[flag]) {
+      hasItems = true;
+      const card = document.createElement("div");
+      card.style.cssText = "background:#0f3460; border:1px solid #e94560; padding:8px 12px; border-radius:4px; margin:4px; display:inline-block;";
+      card.textContent = itemNames[flag];
+      container.appendChild(card);
+    }
+  });
+
+  if (!hasItems) {
+    container.innerHTML = "<p style='color:#aaa;'>Seu inventário está vazio.</p>";
+  }
+}
+
 // ====================== MOTOR DAS CENAS ======================
 function showScene(id, resetIndex = true) {
   const scene = story[id];
@@ -69,7 +104,7 @@ function showScene(id, resetIndex = true) {
   state.current = id;
   if (resetIndex) state.textIndex = 0;
 
-  // Atualiza a barra de inventário visual
+  // Atualiza a barra de inventário visual (caso esteja usando a barra rápida)
   updateInventoryUI();
 
   // Imagens de Cenário e Personagem
@@ -194,50 +229,109 @@ function advanceDialogue() {
 // Evento de clique na caixa de texto
 document.getElementById("textbox").addEventListener("click", advanceDialogue);
 
-// Abrir e Fechar Modal do Mapa
-function openMap() {
-  document.getElementById("map-modal").style.display = "flex";
-}
-
-function closeMap() {
-  document.getElementById("map-modal").style.display = "none";
-}
-
 // Viajar para a cena escolhida pelo mapa
 function travelTo(sceneId) {
-  closeMap();
+  closeModal("map-modal");
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.remove("active");
   showScene(sceneId);
 }
 
-
-
-
-
-
-
-
-
-
-
-// ====================== SAVE / LOAD ======================
-function saveGame() {
-  localStorage.setItem("meu_jogo_save", JSON.stringify(state));
-  showStatus("Jogo salvo!");
+// ====================== SAVE / LOAD POR SLOTS ======================
+function openSaveLoadModal(mode) {
+  currentSaveMode = mode;
+  const titleEl = document.getElementById("saveload-title");
+  if (titleEl) titleEl.textContent = mode === "save" ? "Salvar Jogo" : "Carregar Jogo";
+  
+  renderSaveSlots();
+  openModal("saveload-modal");
 }
 
-function loadGame() {
-  const data = localStorage.getItem("meu_jogo_save");
-  if (data) {
-    state = JSON.parse(data);
-    showScene(state.current, false);
-    showStatus("Jogo carregado!");
-  } else {
-    showStatus("Nenhum save encontrado!");
+function getSavedSlots() {
+  const data = localStorage.getItem("vn_slots_save");
+  return data ? JSON.parse(data) : {};
+}
+
+function renderSaveSlots() {
+  const container = document.getElementById("slots-grid");
+  if (!container) return;
+  
+  container.innerHTML = "";
+  const slots = getSavedSlots();
+
+  for (let i = 1; i <= 8; i++) {
+    const slotData = slots[i];
+    const slotDiv = document.createElement("div");
+    slotDiv.className = "save-slot";
+
+    if (slotData) {
+      slotDiv.innerHTML = `
+        <div class="slot-number">${i}</div>
+        <div class="slot-info">
+          <div class="slot-scene">${slotData.sceneName || 'Cena ' + slotData.current}</div>
+          <div class="slot-date">${slotData.date}</div>
+        </div>
+        <span class="slot-delete" onclick="deleteSlot(event, ${i})">✖</span>
+      `;
+      slotDiv.onclick = () => handleSlotClick(i, slotData);
+    } else {
+      slotDiv.innerHTML = `
+        <div class="slot-number">${i}</div>
+        <div class="slot-info">
+          <div class="slot-scene" style="color:#666;">-- VAZIO --</div>
+        </div>
+      `;
+      slotDiv.onclick = () => handleSlotClick(i, null);
+    }
+
+    container.appendChild(slotDiv);
   }
+}
+
+function handleSlotClick(slotIndex, slotData) {
+  if (currentSaveMode === "save") {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    const slots = getSavedSlots();
+    slots[slotIndex] = {
+      ...state,
+      date: dateStr,
+      sceneName: "Cena: " + state.current
+    };
+
+    localStorage.setItem("vn_slots_save", JSON.stringify(slots));
+    renderSaveSlots();
+    closeModal("saveload-modal");
+    showStatus("Jogo Salvo no Slot " + slotIndex);
+  } else {
+    if (slotData) {
+      state = { ...slotData };
+      closeModal("saveload-modal");
+      
+      const sidebar = document.getElementById("sidebar");
+      if (sidebar) sidebar.classList.remove("active");
+      
+      switchScreen("game-screen");
+      showScene(state.current, false); // Restaura mantendo o índice da fala
+      showStatus("Jogo Carregado do Slot " + slotIndex);
+    } else {
+      showStatus("Slot vazio!");
+    }
+  }
+}
+
+function deleteSlot(event, slotIndex) {
+  event.stopPropagation();
+  const slots = getSavedSlots();
+  delete slots[slotIndex];
+  localStorage.setItem("vn_slots_save", JSON.stringify(slots));
+  renderSaveSlots();
 }
 
 function showStatus(msg) {
   const el = document.getElementById("status");
+  if (!el) return;
   el.textContent = msg;
   el.style.display = "block";
   setTimeout(() => el.style.display = "none", 1800);
