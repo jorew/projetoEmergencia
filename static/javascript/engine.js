@@ -75,7 +75,94 @@ function renderInventoryModal() {
 }
 
 // ====================== MOTOR DAS CENAS ======================
+
 function showScene(id, resetIndex = true) {
+    const scene = story[id];
+      if (!scene) return;
+
+        state.current = id;
+          if (resetIndex) state.textIndex = 0;
+
+            const bg = document.getElementById("background");
+              const char = document.getElementById("character");
+                const textbox = document.getElementById("textbox");
+                  const hotspotsLayer = document.getElementById("hotspots-layer");
+
+                    // Limpa hotspots anteriores
+                      if (hotspotsLayer) hotspotsLayer.innerHTML = "";
+
+                        // Atualiza imagens de fundo e personagem
+                          if (scene.background) {
+                              bg.src = scene.background;
+                                  bg.style.display = "block";
+                                    } else {
+                                        bg.style.display = "none";
+                                          }
+
+                                            if (scene.character) {
+                                                char.src = scene.character;
+                                                    char.style.display = "block";
+                                                      } else {
+                                                          char.style.display = "none";
+                                                            }
+
+                                                              // ================= MODO MINIGAME =================
+                                                                if (scene.type === "minigame") {
+                                                                    textbox.style.display = "none"; // Esconde a caixa de texto
+                                                                        
+                                                                            // Inicia o minigame usando o módulo minigames.js
+                                                                                if (typeof startMinigame === "function") {
+                                                                                      startMinigame(scene.gameId, (resultado) => {
+                                                                                              if (resultado === "win") {
+                                                                                                        state.flags[`${scene.gameId}_cleared`] = true;
+                                                                                                                  showScene(scene.onSuccess);
+                                                                                                                          } else if (resultado === "fail") {
+                                                                                                                                    showScene(scene.onFailure);
+                                                                                                                                            } else {
+                                                                                                                                                      showScene(scene.onCancel || state.current);
+                                                                                                                                                              }
+                                                                                                                                                                    });
+                                                                                                                                                                        } else {
+                                                                                                                                                                              console.error("A função startMinigame não está definida no minigames.js");
+                                                                                                                                                                                  }
+                                                                                                                                                                                      return; // Interrompe a execução para não carregar diálogos
+                                                                                                                                                                                        }
+
+                                                                                                                                                                                          // ================= MODO EXPLORAÇÃO =================
+                                                                                                                                                                                            if (scene.type === "explore") {
+                                                                                                                                                                                                textbox.style.display = "none";
+
+                                                                                                                                                                                                    if (scene.hotspots && hotspotsLayer) {
+                                                                                                                                                                                                          scene.hotspots.forEach(spot => {
+                                                                                                                                                                                                                  if (spot.requires && !state.flags[spot.requires]) return;
+
+                                                                                                                                                                                                                          const btn = document.createElement("button");
+                                                                                                                                                                                                                                  btn.className = "hotspot";
+                                                                                                                                                                                                                                          btn.style.top = spot.top;
+                                                                                                                                                                                                                                                  btn.style.left = spot.left;
+                                                                                                                                                                                                                                                          btn.textContent = spot.label;
+                                                                                                                                                                                                                                                                  btn.onclick = (e) => {
+                                                                                                                                                                                                                                                                            e.stopPropagation();
+                                                                                                                                                                                                                                                                                      if (spot.flag) state.flags[spot.flag] = true;
+                                                                                                                                                                                                                                                                                                showScene(spot.next);
+                                                                                                                                                                                                                                                                                                        };
+                                                                                                                                                                                                                                                                                                                hotspotsLayer.appendChild(btn);
+                                                                                                                                                                                                                                                                                                                      });
+                                                                                                                                                                                                                                                                                                                          }
+                                                                                                                                                                                                                                                                                                                            } 
+                                                                                                                                                                                                                                                                                                                              // ================= MODO NARRATIVA NORMAL =================
+                                                                                                                                                                                                                                                                                                                                else {
+                                                                                                                                                                                                                                                                                                                                    textbox.style.display = "block";
+                                                                                                                                                                                                                                                                                                                                        document.getElementById("speaker").textContent = scene.speaker || "";
+                                                                                                                                                                                                                                                                                                                                            renderDialogue();
+                                                                                                                                                                                                                                                                                                                                              }
+                                                                                                                                                                                                                                                                                                                                              }
+
+
+
+
+
+/* ction showScene(id, resetIndex = true) {
   const scene = story[id];
   if (!scene) return;
 
@@ -147,95 +234,7 @@ function showScene(id, resetIndex = true) {
   } 
   // MODO 2: CENA DE NARRATIVA NORMAL / DIÁLOGO
   else {
-    textbox.style.display = "block";
-    document.getElementById("speaker").textContent = scene.speaker || "";
-    renderDialogue();
-  }
-}
-
-function renderDialogue() {
-  const scene = story[state.current];
-  const choicesDiv = document.getElementById("choices");
-  const textDiv = document.getElementById("text");
-
-  const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
-  const currentItem = dialogueList[state.textIndex];
-
-  const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
-  const currentEmotion = typeof currentItem === 'object' ? currentItem.emotion : (scene.emotion || 'neutral');
-
-  textDiv.className = "";
-  if (currentEmotion) {
-    textDiv.classList.add(`emotion-${currentEmotion}`);
-  }
-
-  choicesDiv.innerHTML = "";
-  clearInterval(typeWriterTimer);
-
-  textDiv.textContent = "";
-  let charIndex = 0;
-  isTyping = true;
-
-  typeWriterTimer = setInterval(() => {
-    if (charIndex < currentText.length) {
-      textDiv.textContent += currentText.charAt(charIndex);
-      charIndex++;
-    } else {
-      finishTyping(dialogueList, scene, choicesDiv);
-    }
-  }, 30);
-}
-
-function finishTyping(dialogueList, scene, choicesDiv) {
-  clearInterval(typeWriterTimer);
-  isTyping = false;
-
-  const textDiv = document.getElementById("text");
-  const currentItem = dialogueList[state.textIndex];
-  const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
-  textDiv.textContent = currentText;
-
-  if (state.textIndex >= dialogueList.length - 1) {
-    choicesDiv.innerHTML = "";
-    scene.choices.forEach(choice => {
-      if (choice.requires && !state.flags[choice.requires]) return;
-
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-      btn.textContent = choice.text;
-      btn.onclick = (e) => {
-        e.stopPropagation();
-        if (choice.flag) state.flags[choice.flag] = true;
-
-        if (choice.next === "restart") {
-          restartGame();
-        } else {
-          showScene(choice.next);
-        }
-      };
-      choicesDiv.appendChild(btn);
-    });
-  } else {
-    choicesDiv.innerHTML = "<small style='color:#aaa; cursor:pointer;'>Clique no texto para continuar...</small>";
-  }
-}
-
-function advanceDialogue() {
-  const scene = story[state.current];
-  if (!scene || scene.type === "explore") return;
-
-  const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
-
-  if (isTyping) {
-    finishTyping(dialogueList, scene, document.getElementById("choices"));
-    return;
-  }
-
-  if (state.textIndex < dialogueList.length - 1) {
-    state.textIndex++;
-    renderDialogue();
-  }
-}
+    textbox.style.display = "bloc */
 
 document.getElementById("textbox").addEventListener("click", advanceDialogue);
 

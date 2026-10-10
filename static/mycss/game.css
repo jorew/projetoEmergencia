@@ -491,3 +491,20 @@ body {
   transform: translate(-50%, -50%) scale(1.15);
   background: #ff6b81;
 }
+
+
+
+/* CONTAINER DO MINIGAME */
+#minigame-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 80; /* Garante que fique por cima da cena e do fundo */
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
