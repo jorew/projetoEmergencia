@@ -209,7 +209,7 @@
     emotion: "happy",
     text: "*BEEP! BEEP!* O painel acendeu a luz verde! A Saída de Emergência foi desbloqueada.",
     choices: [
-      { text: "Ir até à porta", next: "lab_exploracao" }
+      { text: "Ir até à porta", next: "fuga_sucesso" }
     ]
   },
 
