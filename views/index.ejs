@@ -8,91 +8,103 @@
 </head>
 <body>
 
-  <!-- TELA DE TÍTULO -->
-  <div id="title-screen" class="screen active">
-    <h1>Visual Novel Game</h1>
-    <div class="title-buttons">
-      <button onclick="startGame()">Novo Jogo</button>
-      <button onclick="openSaveLoadModal('load')">Carregar Jogo</button>
-    </div>
-  </div>
+  <div id="game">
 
-  <!-- TELA DE JOGO -->
-  <div id="game-screen" class="screen">
-    
-    <!-- BOTÃO FLUTUANTE PARA ABRIR A SIDEBAR -->
-    <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
-
-    <!-- BARRA LATERAL (SIDEBAR) -->
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-header">
-        <h3>Navegação</h3>
-        <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
+    <!-- TELA DE TÍTULO -->
+    <div id="title-screen" class="screen active">
+      <h1 class="game-title">Visual Novel Game</h1>
+      <div class="title-buttons">
+        <button class="choice-btn" onclick="startGame()">Novo Jogo</button>
+        <button class="choice-btn" onclick="openSaveLoadModal('load')">Carregar Jogo</button>
       </div>
+    </div>
+
+    <!-- TELA DE JOGO -->
+    <div id="game-screen" class="screen">
       
-      <div class="sidebar-group">
-        <button class="sidebar-btn" onclick="openModal('inventory-modal')">🎒 Inventário</button>
-        <button class="sidebar-btn" onclick="openModal('map-modal')">🗺️ Mapa</button>
-      </div>
+      <!-- BOTÃO FLUTUANTE DA SIDEBAR -->
+      <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
-      <div class="sidebar-header mt-15">
-        <h3>Menu</h3>
-      </div>
-      <div class="sidebar-group">
-        <button class="sidebar-btn" onclick="openSaveLoadModal('save')">💾 Salvar Jogo</button>
-        <button class="sidebar-btn" onclick="openSaveLoadModal('load')">📂 Carregar Jogo</button>
-        <button class="sidebar-btn danger" onclick="restartGame()">🏠 Menu Principal</button>
-      </div>
-    </aside>
+      <!-- BARRA LATERAL (SIDEBAR) -->
+      <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h3>Navegação</h3>
+          <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
+        </div>
+        
+        <div class="sidebar-group">
+          <button class="sidebar-btn" onclick="openModal('inventory-modal')">🎒 Inventário</button>
+          <button class="sidebar-btn" onclick="openModal('map-modal')">🗺️ Mapa</button>
+        </div>
 
-    <!-- MODAL DE INVENTÁRIO -->
-    <div id="inventory-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('inventory-modal')">&times;</span>
-        <h3>Seus Itens</h3>
-        <div id="inventory-items-container"></div>
-      </div>
-    </div>
+        <div class="sidebar-header mt-15">
+          <h3>Menu</h3>
+        </div>
+        <div class="sidebar-group">
+          <button class="sidebar-btn" onclick="openSaveLoadModal('save')">💾 Salvar Jogo</button>
+          <button class="sidebar-btn" onclick="openSaveLoadModal('load')">📂 Carregar Jogo</button>
+          <button class="sidebar-btn danger" onclick="restartGame()">🏠 Menu Principal</button>
+        </div>
+      </aside>
 
-    <!-- MODAL DO MAPA -->
-    <div id="map-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('map-modal')">&times;</span>
-        <h3>Selecione um Destino</h3>
-        <div class="map-container">
-          <img src="/images/map.jpg" id="map-image" alt="Mapa">
-          <button class="map-point" style="top: 30%; left: 25%;" onclick="travelTo('start')">📍 Início</button>
-          <button class="map-point" style="top: 55%; left: 60%;" onclick="travelTo('corredor')">📍 Corredor</button>
+      <!-- MODAL DE INVENTÁRIO -->
+      <div id="inventory-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeModal('inventory-modal')">&times;</span>
+          <h3>Seus Itens</h3>
+          <div id="inventory-items-container"></div>
         </div>
       </div>
+
+      <!-- MODAL DO MAPA -->
+      <div id="map-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeModal('map-modal')">&times;</span>
+          <h3>Selecione um Destino</h3>
+          <div class="map-container">
+            <img src="/images/map.jpg" id="map-image" alt="Mapa">
+            <button class="map-point" style="top: 30%; left: 25%;" onclick="travelTo('start')">📍 Início</button>
+            <button class="map-point" style="top: 55%; left: 60%;" onclick="travelTo('corredor')">📍 Corredor</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL DE SAVE / LOAD POR SLOTS -->
+      <div id="saveload-modal" class="modal">
+        <div class="modal-content vn-saveload-box">
+          <span class="close-btn" onclick="closeSaveModal()">&times;</span>
+          <h2 id="saveload-title">Salvar Jogo</h2>
+          <div class="saveload-grid" id="slots-grid"></div>
+        </div>
+      </div>
+
+      <!-- CONTEÚDO PRINCIPAL DA CENA DA HISTÓRIA -->
+      <div id="scene">
+        <img id="background" src="" alt="Fundo">
+        <img id="character" src="" alt="Personagem">
+        
+        <!-- CAMADA DE EXPLORAÇÃO (HOTSPOTS CLICÁVEIS) -->
+        <div id="hotspots-layer"></div>
+
+        <!-- CONTAINER PREPARADO PARA MINIGAMES FUTUROS -->
+        <div id="minigame-container" style="display: none;"></div>
+        
+        <!-- CAIXA DE TEXTO (FIXADA EMBAIXO) -->
+        <div id="textbox">
+          <div id="speaker"></div>
+          <div id="text"></div>
+          <div id="choices"></div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- MODAL DE SAVE / LOAD POR SLOTS -->
-    <div id="saveload-modal" class="modal">
-      <div class="modal-content vn-saveload-box">
-        <span class="close-btn" onclick="closeModal('saveload-modal')">&times;</span>
-        <h2 id="saveload-title">Salvar Jogo</h2>
-        <div class="saveload-grid" id="slots-grid"></div>
-      </div>
-    </div>
-
-    <!-- CONTEÚDO DA CENA -->
-    <div id="scene">
-      <img id="background" src="" alt="Fundo">
-      <img id="character" src="" alt="Personagem">
-      
-      <div id="textbox">
-        <div id="speaker"></div>
-        <div id="text"></div>
-        <div id="choices"></div>
-      </div>
-    </div>
+    <!-- MENSAGEM FLUTUANTE DE STATUS -->
+    <div id="status"></div>
 
   </div>
 
-  <div id="status"></div>
-
-  <!-- SCRIPTS CLIENT-SIDE -->
+  <!-- SCRIPTS -->
   <script src="/javascript/story.js"></script>
   <script src="/javascript/engine.js"></script>
 </body>
