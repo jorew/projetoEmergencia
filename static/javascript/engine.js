@@ -2,15 +2,14 @@
 let state = {
   current: "start",
   flags: {},
-  textIndex: 0 // Controla a fala atual dentro da cena
+  textIndex: 0
 };
 
-// Controle da animação de digitação (Typewriter)
 let typeWriterTimer = null;
 let isTyping = false;
-let currentSaveMode = "save"; // Define se o modal do slot está em modo "save" ou "load"
+let currentSaveMode = "save";
 
-// ====================== GERENCIAMENTO DE TELAS E SIDEBAR ======================
+// ====================== GERENCIAMENTO DE TELAS E INTERFACE ======================
 function switchScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
@@ -48,28 +47,7 @@ function restartGame() {
   switchScreen("title-screen");
 }
 
-// ====================== INTERFACE DO INVENTÁRIO ======================
-function updateInventoryUI() {
-  const container = document.getElementById("inventory-items");
-  if (!container) return;
-  
-  container.innerHTML = "";
-
-  // Mapeamento das flags ativas para nomes exibidos
-  const itemNames = {
-    tem_chave: "🔑 Chave de Ferro"
-  };
-
-  Object.keys(state.flags).forEach(flag => {
-    if (state.flags[flag] && itemNames[flag]) {
-      const badge = document.createElement("span");
-      badge.className = "item-badge";
-      badge.textContent = itemNames[flag];
-      container.appendChild(badge);
-    }
-  });
-}
-
+// ====================== INVENTÁRIO ======================
 function renderInventoryModal() {
   const container = document.getElementById("inventory-items-container");
   if (!container) return;
@@ -104,13 +82,15 @@ function showScene(id, resetIndex = true) {
   state.current = id;
   if (resetIndex) state.textIndex = 0;
 
-  // Atualiza a barra de inventário visual (caso esteja usando a barra rápida)
-  updateInventoryUI();
-
-  // Imagens de Cenário e Personagem
   const bg = document.getElementById("background");
   const char = document.getElementById("character");
+  const textbox = document.getElementById("textbox");
+  const hotspotsLayer = document.getElementById("hotspots-layer");
 
+  // Limpa hotspots da cena anterior
+  if (hotspotsLayer) hotspotsLayer.innerHTML = "";
+
+  // Imagens de Cenário e Personagem
   if (scene.background) {
     bg.src = scene.background;
     bg.style.display = "block";
@@ -125,32 +105,52 @@ function showScene(id, resetIndex = true) {
     char.style.display = "none";
   }
 
-  // Nome do personagem
-  document.getElementById("speaker").textContent = scene.speaker || "";
-  renderDialogue();
+  // MODO 1: CENA DE EXPLORAÇÃO (Com hotspots no cenário, sem caixa de texto)
+  if (scene.type === "explore") {
+    textbox.style.display = "none";
+
+    if (scene.hotspots && hotspotsLayer) {
+      scene.hotspots.forEach(spot => {
+        if (spot.requires && !state.flags[spot.requires]) return;
+
+        const btn = document.createElement("button");
+        btn.className = "hotspot";
+        btn.style.top = spot.top;
+        btn.style.left = spot.left;
+        btn.textContent = spot.label;
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          if (spot.flag) state.flags[spot.flag] = true;
+          showScene(spot.next);
+        };
+        hotspotsLayer.appendChild(btn);
+      });
+    }
+  } 
+  // MODO 2: CENA DE NARRATIVA NORMAL / DIÁLOGO
+  else {
+    textbox.style.display = "block";
+    document.getElementById("speaker").textContent = scene.speaker || "";
+    renderDialogue();
+  }
 }
 
-// Renderiza a fala com efeito letra por letra e aplica classes de emoção
 function renderDialogue() {
   const scene = story[state.current];
   const choicesDiv = document.getElementById("choices");
   const textDiv = document.getElementById("text");
 
-  // Garante suporte para array de falas ou fala única
   const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
   const currentItem = dialogueList[state.textIndex];
 
-  // Extrai texto e emoção (funciona com string ou objeto { text, emotion })
   const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
   const currentEmotion = typeof currentItem === 'object' ? currentItem.emotion : (scene.emotion || 'neutral');
 
-  // Reseta e aplica a classe de emoção no container
   textDiv.className = "";
   if (currentEmotion) {
     textDiv.classList.add(`emotion-${currentEmotion}`);
   }
 
-  // Reseta escolhas e cancela digitação em andamento
   choicesDiv.innerHTML = "";
   clearInterval(typeWriterTimer);
 
@@ -158,7 +158,6 @@ function renderDialogue() {
   let charIndex = 0;
   isTyping = true;
 
-  // Animação letra por letra (30ms por caractere)
   typeWriterTimer = setInterval(() => {
     if (charIndex < currentText.length) {
       textDiv.textContent += currentText.charAt(charIndex);
@@ -169,30 +168,25 @@ function renderDialogue() {
   }, 30);
 }
 
-// Finaliza a animação de digitação e exibe escolhas ou instrução de clique
 function finishTyping(dialogueList, scene, choicesDiv) {
   clearInterval(typeWriterTimer);
   isTyping = false;
 
   const textDiv = document.getElementById("text");
-  
-  // Exibe a frase completa na tela
   const currentItem = dialogueList[state.textIndex];
   const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
   textDiv.textContent = currentText;
 
-  // Se for a última fala do nó, renderiza as escolhas válidas
   if (state.textIndex >= dialogueList.length - 1) {
     choicesDiv.innerHTML = "";
     scene.choices.forEach(choice => {
-      // Oculta opções que exijam itens/flags que o jogador não possui
       if (choice.requires && !state.flags[choice.requires]) return;
 
       const btn = document.createElement("button");
       btn.className = "choice-btn";
       btn.textContent = choice.text;
       btn.onclick = (e) => {
-        e.stopPropagation(); // Impede o clique de ativar a caixa de texto
+        e.stopPropagation();
         if (choice.flag) state.flags[choice.flag] = true;
 
         if (choice.next === "restart") {
@@ -208,28 +202,25 @@ function finishTyping(dialogueList, scene, choicesDiv) {
   }
 }
 
-// Avança o diálogo ao clicar ou completa a digitação instantaneamente
 function advanceDialogue() {
   const scene = story[state.current];
+  if (!scene || scene.type === "explore") return;
+
   const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
 
-  // Se o texto ainda estiver digitando, revela a frase completa imediatamente
   if (isTyping) {
     finishTyping(dialogueList, scene, document.getElementById("choices"));
     return;
   }
 
-  // Se já terminou de digitar, avança para a próxima frase
   if (state.textIndex < dialogueList.length - 1) {
     state.textIndex++;
     renderDialogue();
   }
 }
 
-// Evento de clique na caixa de texto
 document.getElementById("textbox").addEventListener("click", advanceDialogue);
 
-// Viajar para a cena escolhida pelo mapa
 function travelTo(sceneId) {
   closeModal("map-modal");
   const sidebar = document.getElementById("sidebar");
@@ -243,8 +234,20 @@ function openSaveLoadModal(mode) {
   const titleEl = document.getElementById("saveload-title");
   if (titleEl) titleEl.textContent = mode === "save" ? "Salvar Jogo" : "Carregar Jogo";
   
+  if (mode === "load") {
+    switchScreen("game-screen");
+  }
+
   renderSaveSlots();
   openModal("saveload-modal");
+}
+
+function closeSaveModal() {
+  closeModal("saveload-modal");
+  // Se fechou sem carregar vindo do menu, retorna para a tela inicial
+  if (currentSaveMode === "load" && (!state.current || (state.current === "start" && document.getElementById("text").textContent === ""))) {
+    switchScreen("title-screen");
+  }
 }
 
 function getSavedSlots() {
@@ -313,7 +316,7 @@ function handleSlotClick(slotIndex, slotData) {
       if (sidebar) sidebar.classList.remove("active");
       
       switchScreen("game-screen");
-      showScene(state.current, false); // Restaura mantendo o índice da fala
+      showScene(state.current, false);
       showStatus("Jogo Carregado do Slot " + slotIndex);
     } else {
       showStatus("Slot vazio!");
