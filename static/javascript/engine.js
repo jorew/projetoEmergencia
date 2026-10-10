@@ -126,6 +126,24 @@ function showScene(id, resetIndex = true) {
         hotspotsLayer.appendChild(btn);
       });
     }
+
+    if (scene.type === "minigame") {
+  textbox.style.display = "none";
+  if (hotspotsLayer) hotspotsLayer.innerHTML = "";
+
+  // Chama a função global do minigames.js
+  startMinigame(scene.gameId, (resultado) => {
+    if (resultado === "win") {
+      state.flags[`${scene.gameId}_cleared`] = true;
+      showScene(scene.onSuccess);
+    } else if (resultado === "fail") {
+      showScene(scene.onFailure);
+    } else {
+      showScene(scene.onCancel || state.current);
+    }
+  });
+  return;
+}
   } 
   // MODO 2: CENA DE NARRATIVA NORMAL / DIÁLOGO
   else {

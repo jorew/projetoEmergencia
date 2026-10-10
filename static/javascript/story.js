@@ -1,4 +1,4 @@
-const story = {
+/* t story = {
     start: {
       speaker: "Narrador",
       background: null,
@@ -96,4 +96,131 @@ const story = {
         { text: "Tentar de novo", next: "start" }
       ]
     }
-  };
+  };*/
+
+
+  const story = {
+  // ================= 1. NARRATIVA DE ENTRADA =================
+  start: {
+    speaker: "Agente",
+    emotion: "scared",
+    background: "/images/lab_fechado.jpg",
+    text: [
+      "A porta de alta segurança trancou-se atrás de mim!",
+      "O alarme de contaminação vai disparar em breve. Preciso de encontrar o código para desativar o terminal e sair daqui."
+    ],
+    choices: [
+      { text: "Investigar o Laboratório", next: "lab_exploracao" }
+    ]
+  },
+
+  // ================= 2. CENA DE EXPLORAÇÃO COM HOTSPOTS =================
+  lab_exploracao: {
+    type: "explore",
+    background: "/images/lab_fechado.jpg",
+    hotspots: [
+      { 
+        label: "🖥️ Terminal", 
+        top: "45%", 
+        left: "25%", 
+        next: "checar_terminal" 
+      },
+      { 
+        label: "🔬 Bancada", 
+        top: "65%", 
+        left: "70%", 
+        next: "investigar_bancada" 
+      },
+      { 
+        label: "🗄️ Arquivo", 
+        top: "35%", 
+        left: "85%", 
+        next: "investigar_arquivo" 
+      },
+      { 
+        label: "🚪 Saída de Emergência", 
+        top: "40%", 
+        left: "50%", 
+        requires: "senha_correta", // Só aparece interativo quando desbloquear no minigame!
+        next: "fuga_sucesso" 
+      }
+    ]
+  },
+
+  // ================= 3. NÓS DE INTERAÇÃO DOS HOTSPOTS =================
+
+  // Hotspot: Arquivo
+  investigar_arquivo: {
+    speaker: "Agente",
+    emotion: "neutral",
+    text: "Gavetas trancadas com papéis confidenciais. Nada de útil sobre a porta.",
+    choices: [
+      { text: "Continuar a procurar", next: "lab_exploracao" }
+    ]
+  },
+
+  // Hotspot: Bancada (Acha a senha e ganha a flag)
+  investigar_bancada: {
+    speaker: "Agente",
+    emotion: "happy",
+    text: [
+      "Afasto alguns frascos de vidro e vejo um bloco de notas rabiscado.",
+      "Há um código anotado em destaque: '1984'!"
+    ],
+    choices: [
+      { text: "Guardar anotação e voltar", flag: "tem_anotacao", next: "lab_exploracao" }
+    ]
+  },
+
+  // Hotspot: Terminal (Decide se acede ao minigame ou recua)
+  checar_terminal: {
+    speaker: "Agente",
+    emotion: "neutral",
+    text: "O ecrã do terminal pede um código de acesso de 4 dígitos.",
+    choices: [
+      { text: "Tentar introduzir o código", next: "minigame_terminal" },
+      { text: "Voltar a examinar a sala", next: "lab_exploracao" }
+    ]
+  },
+
+  // ================= 4. CENA DO MINIGAME =================
+  minigame_terminal: {
+    type: "minigame",
+    gameId: "keypad_code",
+    onSuccess: "terminal_desbloqueado",
+    onFailure: "terminal_erro",
+    onCancel: "lab_exploracao"
+  },
+
+  // Resultado: Falha no Minigame
+  terminal_erro: {
+    speaker: "Sistema",
+    emotion: "angry",
+    text: "CÓDIGO INCORRETO! Acesso negado. Tente novamente.",
+    choices: [
+      { text: "Tentar novamente", next: "minigame_terminal" },
+      { text: "Procurar mais pistas pelo laboratório", next: "lab_exploracao" }
+    ]
+  },
+
+  // Resultado: Sucesso no Minigame
+  terminal_desbloqueado: {
+    speaker: "Agente",
+    emotion: "happy",
+    text: "*BEEP! BEEP!* O painel acendeu a luz verde! A Saída de Emergência foi desbloqueada.",
+    choices: [
+      { text: "Ir até à porta", next: "lab_exploracao" }
+    ]
+  },
+
+  // ================= 5. FINAL DA CENA =================
+  fuga_sucesso: {
+    speaker: "Agente",
+    emotion: "happy",
+    background: "/images/corredor.jpg",
+    text: "Empurro a porta de emergência pesada e consigo sair antes do bloqueio total do complexo!",
+    choices: [
+      { text: "Voltar ao Menu Principal", next: "restart" }
+    ]
+  }
+};
