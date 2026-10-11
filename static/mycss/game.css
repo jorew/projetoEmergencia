@@ -193,6 +193,26 @@ body {
   display: none;
 }
 
+/* CAMADA DE ESCURECIMENTO (TRANSIÇÃO SMOOTH FADE) */
+#fade-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 99;
+  transition: opacity 0.35s ease-in-out;
+}
+
+#fade-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* CAIXA DE TEXTO */
 #textbox {
   background: rgba(0, 0, 0, 0.9);
   padding: 16px;
@@ -217,7 +237,21 @@ body {
   min-height: 60px;
 }
 
-/* ================= HOTSPOTS (CAMADA DE EXPLORAÇÃO) ================= */
+/* CONTAINER DO MINIGAME */
+#minigame-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* HOTSPOTS (CAMADA DE EXPLORAÇÃO) */
 #hotspots-layer {
   position: absolute;
   top: 0; left: 0;
@@ -248,8 +282,7 @@ body {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* ================= EFEITOS DE SENTIMENTO ================= */
-
+/* EFEITOS DE SENTIMENTO */
 .emotion-neutral {
   color: #eee !important;
   opacity: 1;
@@ -303,7 +336,6 @@ body {
   to { transform: translateY(0); opacity: 0.75; }
 }
 
-/* Cursor retrô */
 #text::after {
   content: '▋';
   display: inline-block;
@@ -360,7 +392,7 @@ body {
   z-index: 200;
 }
 
-/* ================= MODAIS EM GERAL ================= */
+/* MODAIS EM GERAL */
 .modal {
   display: none !important; 
   position: fixed;
@@ -395,7 +427,7 @@ body {
   cursor: pointer;
 }
 
-/* ================= PAINEL SAVE/LOAD (SLOTS ESTILO VN) ================= */
+/* SLOTS DE SAVE/LOAD */
 .vn-saveload-box {
   max-width: 750px;
   width: 95%;
@@ -491,20 +523,3 @@ body {
   transform: translate(-50%, -50%) scale(1.15);
   background: #ff6b81;
 }
-
-
-
-/* CONTAINER DO MINIGAME */
-#minigame-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 80; /* Garante que fique por cima da cena e do fundo */
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-}
-
