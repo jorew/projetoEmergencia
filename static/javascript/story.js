@@ -102,8 +102,72 @@
   const story = {
   // ================= 1. NARRATIVA DE ENTRADA =================
   start: {
+    speaker: "Eu",
+    background: null,
+    character: null,
+    text: [
+      { text: "Eu nunca entendi muito bem..."},
+      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família."},
+      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim."},
+      { text: "Eu sou filho único da família e favorito consequentemente... hihi ~"},
+      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado."}
+    ],
+    choices: [
+      { text: "Prosseguir", next: "certa_vez"}
+    ]
     
+  },
+
+
+  certa_vez: {
+    speaker: "Eu",
+    background: null,
+    character: null,
+    text: [
+      { text: "Mas teve uma certa vez que eu desci da minha cama no meio da madrugada,"},
+      { text: "Escutei vozes abafadas quando cheguei perto da cozinha, a casa era grande."},
+      { text: "Minha vó, meu avô, minha mãe e o meu pai estava conversando sobre a minha tia Ana."},
+      { text: "Eu escutei o choro baixo da minha mãe... e os outros familiares incluindo meu pai -"},
+      { text: "estavam apoiando ela como podiam... pensei comigo mesmo: 'não é a primeira vez que isso acontece'."},
+      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto na mente."}
+
+    ],
+
+    choices: [
+      { text: "Prosseguir", next: "pergunta" }
+    ]
+
+  },
+
+
+  pergunta: {
+    speaker: "James",
+    background: null,
+    character: null,
+    text: [
+      { text: "Algumas vezes eu criava coragem para perguntá-la:"},
+      { text: "Mãe, por que eu nunca conheci a tia Ana?", next: "Yohanna_Responde"},
+
+    ]
+
+  },
+
+  Yohanna_Responde: {
+    speaker: "Mãe Yohanna",
+    background: null,
+    character: null,
+    text: [
+      { text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar)."}
+
+    ]
+
+
   }
+
+
+
+
+
 
 
   }
