@@ -140,15 +140,20 @@
   },
 
 
+
   pergunta: {
     speaker: "James",
     background: null,
     character: null,
     text: [
       { text: "Algumas vezes eu criava coragem para perguntá-la:"},
-      { text: "Mãe, por que eu nunca conheci a tia Ana?", next: "Yohanna_Responde"},
+      { text: "Mãe, por que eu nunca conheci a tia Ana?"},
 
-    ]
+    ],
+    choices: [
+      { text: "Resposta de Yohanna", next: "Yohanna_Responde"}
+
+    ],
 
   },
 
@@ -157,12 +162,61 @@
     background: null,
     character: null,
     text: [
-      { text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar)."}
+      { text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar)."},
+      { text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -"},
+      { text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!"},
+      { text: ". . .  ~"}
 
+    ],
+
+    choices: [
+      { text: "Prosseguir", next: "estudo"}
+    ]
+
+  },
+
+  estudo: {
+    speaker: "James",
+    background: null,
+    character: null,
+    text: [
+      { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz."},
+      { text: "Descobri um tempo depois que a tia Ana participava de uma banda -"},
+      { text: "conhecida como Banda Amadeira, tinha ganhado muita popularidade ultimamente. Mas que estranho, fiquei sabendo que todos os membros faleceram em um acidente."},
+      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa..."},
+
+      
+    ],
+    choices: [
+      { text: "Prosseguir", next: "noticia"}
+
+    ],
+
+  },
+
+
+  noticia: {
+    speaker: "James",
+    background: null,
+    character: null,
+    text: [
+      { text: "Os fãs da banda lamentam, alguns nem sabem que os membros faleceram, alguns pensam até que eles ainda estão vivos. E tem aqueles que só querem curtir, não estão nem vendo."},
+      { text: "Vendo algumas notícias, percebi que a banda atuava numa cidade conhecida por desaparecimentos repentinos, Apókryphos Town."},
+      { text: "Perguntei pra minha mãe sobre, mas ela nunca fala nada a respeito. Se eu falar com qualquer outro familiar? Dá na mesma."},
+      { text: "Bem, estou de férias... tenho um bom dinheiro guardado... posso fazer uma viagem para descobrir mais sobre a Banda Amadeira. Como estou de férias acho que posso dar uma passada por lá."}
+
+    ],
+    choices: [
+      { text: "Explore", next: "dev"}
     ]
 
 
   }
+
+
+
+
+
 
 
 
