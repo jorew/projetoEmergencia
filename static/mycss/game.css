@@ -168,7 +168,7 @@ body {
   background: #0f3460;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* FIXA O CONTEÚDO NA PARTE INFERIOR */
+  justify-content: flex-end;
 }
 
 #background {
@@ -181,19 +181,41 @@ body {
   z-index: 1;
 }
 
-#character {
+/* CAMADA DE MÚLTIPLOS PERSONAGENS */
+#characters-layer {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  max-height: 75%;
-  max-width: 90%;
-  image-rendering: pixelated;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 2;
-  display: none;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 5%;
 }
 
-/* CAMADA DE ESCURECIMENTO (TRANSIÇÃO SMOOTH FADE) */
+.character-sprite {
+  max-height: 75%;
+  max-width: 40%;
+  image-rendering: pixelated;
+  transition: filter 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+  filter: brightness(0.4);
+  opacity: 0.7;
+}
+
+.character-sprite.speaking {
+  filter: brightness(1);
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.character-sprite.pos-left { margin-right: auto; }
+.character-sprite.pos-center { margin: 0 auto; }
+.character-sprite.pos-right { margin-left: auto; }
+
+/* CAMADA DE ESCURECIMENTO (FADE) */
 #fade-overlay {
   position: absolute;
   top: 0;
@@ -392,7 +414,7 @@ body {
   z-index: 200;
 }
 
-/* MODAIS EM GERAL */
+/* MODAIS */
 .modal {
   display: none !important; 
   position: fixed;
@@ -427,7 +449,7 @@ body {
   cursor: pointer;
 }
 
-/* SLOTS DE SAVE/LOAD */
+/* SLOTS SAVE/LOAD */
 .vn-saveload-box {
   max-width: 750px;
   width: 95%;
