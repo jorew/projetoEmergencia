@@ -42,38 +42,26 @@
 
 
   pergunta: {
-    speaker: "James",
     background: null,
-    character: null,
-    text: [
-      { text: "Algumas vezes eu criava coragem para perguntá-la:"},
-      { text: "Mãe, por que eu nunca conheci a tia Ana?"},
-
-    ],
-    choices: [
-      { text: "Resposta de Yohanna", next: "Yohanna_Responde"}
-
-    ],
-
+    character: [],
+    text: [{
+      speaker: "James",
+      text: "(Uma vez tive coragem pra perguntar pra ela)",
+      text: "Mãe, por que eu nunca vi a tia Ana? O que houve com ela?",
+      emotion: "",
+      activeChar: null,
+    }],
+  
+    text: [{
+      speaker: "Mãe Yohanna",
+      text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar).",
+      text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -",
+      text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!",
+      emotion: "",
+      activeChar: "",
+    }],
   },
-
-  Yohanna_Responde: {
-    speaker: "Mãe Yohanna",
-    background: null,
-    character: null,
-    text: [
-      { text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar)."},
-      { text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -"},
-      { text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!"},
-      { text: ". . .  ~"}
-
-    ],
-
-    choices: [
-      { text: "Prosseguir", next: "estudo"}
-    ]
-
-  },
+  
 
   estudo: {
     speaker: "James",
@@ -109,19 +97,8 @@
     choices: [
       { text: "Explore", next: "dev"}
     ]
-
-
-  }
-
+  },
 
 
 
-
-
-
-
-
-
-
-
-  }
+}
