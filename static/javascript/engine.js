@@ -2,6 +2,7 @@
 let state = {
   current: "start",
   flags: {},
+  money: 500, // Saldo inicial do jogador ($500)
   textIndex: 0
 };
 
@@ -30,6 +31,23 @@ function changeSceneWithFade(nextSceneId, resetIndex = true) {
   }, 350);
 }
 
+// ====================== GERENCIAMENTO DE DINHEIRO ======================
+function updateHUD() {
+  const moneyEl = document.getElementById("money-display");
+  if (moneyEl) {
+    moneyEl.textContent = `💰 $${state.money}`;
+  }
+}
+
+function addMoney(amount) {
+  state.money += amount;
+  if (state.money < 0) state.money = 0;
+  
+  updateHUD();
+  const sign = amount >= 0 ? "+" : "";
+  showStatus(`Dinheiro: ${sign}$${amount} (Total: $${state.money})`);
+}
+
 // ====================== GERENCIAMENTO DE TELAS E INTERFACE ======================
 function switchScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -45,6 +63,7 @@ function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     if (modalId === "inventory-modal") renderInventoryModal();
+    if (modalId === "quests-modal") renderQuestsModal();
     modal.classList.add("active");
   }
 }
@@ -55,7 +74,7 @@ function closeModal(modalId) {
 }
 
 function startGame() {
-  state = { current: "start", flags: {}, textIndex: 0 };
+  state = { current: "start", flags: {}, money: 500, textIndex: 0 };
   switchScreen("game-screen");
   changeSceneWithFade("start");
 }
@@ -68,6 +87,43 @@ function restartGame() {
   switchScreen("title-screen");
 }
 
+// ====================== OBJETIVOS (QUEST LOG) ======================
+function renderQuestsModal() {
+  const container = document.getElementById("quests-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+  let activeQuestsCount = 0;
+
+  if (typeof questLog === "undefined") {
+    container.innerHTML = "<p style='color:#aaa;'>Nenhum objetivo registrado no story.js.</p>";
+    return;
+  }
+
+  Object.keys(questLog).forEach(key => {
+    const quest = questLog[key];
+
+    // O objetivo aparece se a flag correspondente estiver ativa no state
+    if (state.flags[quest.flag]) {
+      activeQuestsCount++;
+      
+      const card = document.createElement("div");
+      card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
+      
+      card.innerHTML = `
+        <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
+        <p style="font-size: 12px; color: #ccc; line-height: 1.4;">${quest.description}</p>
+      `;
+      
+      container.appendChild(card);
+    }
+  });
+
+  if (activeQuestsCount === 0) {
+    container.innerHTML = "<p style='color:#aaa; text-align:center;'>Nenhum objetivo ativo no momento.</p>";
+  }
+}
+
 // ====================== INVENTÁRIO ======================
 function renderInventoryModal() {
   const container = document.getElementById("inventory-items-container");
@@ -77,7 +133,8 @@ function renderInventoryModal() {
 
   const itemNames = {
     tem_chave: "🔑 Chave de Ferro",
-    tem_anotacao: "📝 Anotação com Código"
+    tem_anotacao: "📝 Anotação com Código",
+    passagem_bus: "🚌 Passagem de Ônibus para Apókryphos"
   };
 
   let hasItems = false;
@@ -103,7 +160,6 @@ function renderCharacters(scene, activeCharId) {
 
   container.innerHTML = "";
 
-  // Suporte legados (Cena simples com apenas um character)
   if (scene.character && !scene.characters) {
     const img = document.createElement("img");
     img.src = scene.character;
@@ -112,7 +168,6 @@ function renderCharacters(scene, activeCharId) {
     return;
   }
 
-  // Suporte a múltiplos personagens na mesma cena
   if (scene.characters && Array.isArray(scene.characters)) {
     scene.characters.forEach(char => {
       const img = document.createElement("img");
@@ -135,6 +190,8 @@ function showScene(id, resetIndex = true) {
 
   state.current = id;
   if (resetIndex) state.textIndex = 0;
+
+  updateHUD(); // Atualiza o saldo financeiro na interface
 
   const bg = document.getElementById("background");
   const textbox = document.getElementById("textbox");
@@ -188,6 +245,7 @@ function showScene(id, resetIndex = true) {
         btn.onclick = (e) => {
           e.stopPropagation();
           if (spot.flag) state.flags[spot.flag] = true;
+          if (spot.reward) addMoney(spot.reward);
           changeSceneWithFade(spot.next);
         };
         hotspotsLayer.appendChild(btn);
@@ -256,9 +314,27 @@ function finishTyping(dialogueList, scene, choicesDiv) {
 
       const btn = document.createElement("button");
       btn.className = "choice-btn";
-      btn.textContent = choice.text;
+      
+      // Se a escolha tiver custo financeiro, inclui no texto do botão
+      let btnLabel = choice.text;
+      if (choice.cost) {
+        btnLabel += ` [💰 -$${choice.cost}]`;
+      }
+      btn.textContent = btnLabel;
+
       btn.onclick = (e) => {
         e.stopPropagation();
+
+        // Validação de dinheiro suficiente
+        if (choice.cost && state.money < choice.cost) {
+          showStatus("Dinheiro insuficiente!");
+          return;
+        }
+
+        // Aplica dedução ou recompensa
+        if (choice.cost) addMoney(-choice.cost);
+        if (choice.reward) addMoney(choice.reward);
+
         if (choice.flag) state.flags[choice.flag] = true;
 
         if (choice.next === "restart") {
@@ -381,6 +457,7 @@ function handleSlotClick(slotIndex, slotData) {
   } else {
     if (slotData) {
       state = { ...slotData };
+      if (typeof state.money === "undefined") state.money = 500;
       closeModal("saveload-modal");
       
       const sidebar = document.getElementById("sidebar");
