@@ -41,26 +41,53 @@
 
 
 
-  pergunta: {
+    pergunta: {
     background: null,
-    character: [],
-    text: [{
-      speaker: "James",
-      text: "(Uma vez tive coragem pra perguntar pra ela)",
-      text: "Mãe, por que eu nunca vi a tia Ana? O que houve com ela?",
-      emotion: "",
-      activeChar: null,
-    }],
-  
-    text: [{
-      speaker: "Mãe Yohanna",
-      text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar).",
-      text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -",
-      text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!",
-      emotion: "",
-      activeChar: "",
-    }],
+    characters: [
+      { id: "james", src: "/images/james.png", position: "left" },
+      { id: "yohanna", src: "/images/yohanna.png", position: "right" }
+    ],
+    text: [
+      // FALAS DO JAMES
+      {
+        speaker: "James",
+        text: "(Uma vez tive coragem pra perguntar pra ela)",
+        emotion: "neutral",
+        activeChar: "james"
+      },
+      {
+        speaker: "James",
+        text: "Mãe, por que eu nunca vi a tia Ana? O que houve com ela?",
+        emotion: "neutral",
+        activeChar: "james"
+      },
+
+      // FALAS DA MÃE YOHANNA
+      {
+        speaker: "Mãe Yohanna",
+        text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar).",
+        emotion: "sad",
+        activeChar: "yohanna"
+      },
+      {
+        speaker: "Mãe Yohanna",
+        text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -",
+        emotion: "sad",
+        activeChar: "yohanna"
+      },
+      {
+        speaker: "Mãe Yohanna",
+        text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!",
+        emotion: "sad",
+        activeChar: "yohanna"
+      }
+    ],
+
+    choices: [
+      { text: "Prosseguir", next: "estudo" }
+    ]
   },
+
   
 
   estudo: {
