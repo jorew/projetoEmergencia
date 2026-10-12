@@ -18,14 +18,11 @@ function changeSceneWithFade(nextSceneId, resetIndex = true) {
     return;
   }
 
-  // 1. Escurece a tela
   overlay.classList.add("active");
 
-  // 2. Espera a animação de escurecer (350ms) e troca os dados da cena
   setTimeout(() => {
     showScene(nextSceneId, resetIndex);
 
-    // 3. Clareia a tela mostrando a nova cena
     setTimeout(() => {
       overlay.classList.remove("active");
     }, 50);
@@ -99,6 +96,38 @@ function renderInventoryModal() {
   }
 }
 
+// ====================== RENDERIZAÇÃO DE PERSONAGENS ======================
+function renderCharacters(scene, activeCharId) {
+  const container = document.getElementById("characters-layer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  // Suporte legados (Cena simples com apenas um character)
+  if (scene.character && !scene.characters) {
+    const img = document.createElement("img");
+    img.src = scene.character;
+    img.className = "character-sprite pos-center speaking";
+    container.appendChild(img);
+    return;
+  }
+
+  // Suporte a múltiplos personagens na mesma cena
+  if (scene.characters && Array.isArray(scene.characters)) {
+    scene.characters.forEach(char => {
+      const img = document.createElement("img");
+      img.src = char.src;
+      img.className = `character-sprite pos-${char.position || 'center'}`;
+
+      if (char.id === activeCharId || scene.characters.length === 1) {
+        img.classList.add("speaking");
+      }
+
+      container.appendChild(img);
+    });
+  }
+}
+
 // ====================== MOTOR DAS CENAS ======================
 function showScene(id, resetIndex = true) {
   const scene = story[id];
@@ -108,16 +137,13 @@ function showScene(id, resetIndex = true) {
   if (resetIndex) state.textIndex = 0;
 
   const bg = document.getElementById("background");
-  const char = document.getElementById("character");
   const textbox = document.getElementById("textbox");
   const hotspotsLayer = document.getElementById("hotspots-layer");
   const minigameContainer = document.getElementById("minigame-container");
 
-  // Limpa elementos temporários
   if (hotspotsLayer) hotspotsLayer.innerHTML = "";
   if (minigameContainer) minigameContainer.style.display = "none";
 
-  // Atualiza Imagens de Fundo e Personagem
   if (scene.background) {
     bg.src = scene.background;
     bg.style.display = "block";
@@ -125,14 +151,7 @@ function showScene(id, resetIndex = true) {
     bg.style.display = "none";
   }
 
-  if (scene.character) {
-    char.src = scene.character;
-    char.style.display = "block";
-  } else {
-    char.style.display = "none";
-  }
-
-  // ================= MODO 1: MINIGAME =================
+  // MODO 1: MINIGAME
   if (scene.type === "minigame") {
     textbox.style.display = "none";
 
@@ -153,7 +172,7 @@ function showScene(id, resetIndex = true) {
     return;
   }
 
-  // ================= MODO 2: CENA DE EXPLORAÇÃO (HOTSPOTS) =================
+  // MODO 2: CENA DE EXPLORAÇÃO (HOTSPOTS)
   if (scene.type === "explore") {
     textbox.style.display = "none";
 
@@ -175,10 +194,9 @@ function showScene(id, resetIndex = true) {
       });
     }
   } 
-  // ================= MODO 3: NARRATIVA NORMAL / DIÁLOGO =================
+  // MODO 3: NARRATIVA NORMAL / DIÁLOGO
   else {
     textbox.style.display = "block";
-    document.getElementById("speaker").textContent = scene.speaker || "";
     renderDialogue();
   }
 }
@@ -192,7 +210,13 @@ function renderDialogue() {
   const currentItem = dialogueList[state.textIndex];
 
   const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
-  const currentEmotion = typeof currentItem === 'object' ? currentItem.emotion : (scene.emotion || 'neutral');
+  const currentSpeaker = typeof currentItem === 'object' && currentItem.speaker ? currentItem.speaker : (scene.speaker || "");
+  const currentEmotion = typeof currentItem === 'object' && currentItem.emotion ? currentItem.emotion : (scene.emotion || 'neutral');
+  const activeCharId = typeof currentItem === 'object' ? currentItem.activeChar : null;
+
+  document.getElementById("speaker").textContent = currentSpeaker;
+
+  renderCharacters(scene, activeCharId);
 
   textDiv.className = "";
   if (currentEmotion) {
