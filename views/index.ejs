@@ -25,6 +25,11 @@
       <!-- BOTÃO FLUTUANTE DA SIDEBAR -->
       <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
 
+      <!-- HUD DE RECURSOS (DINHEIRO) -->
+      <div id="game-hud">
+        <span id="money-display">💰 $0</span>
+      </div>
+
       <!-- BARRA LATERAL (SIDEBAR) -->
       <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
@@ -33,6 +38,7 @@
         </div>
         
         <div class="sidebar-group">
+          <button class="sidebar-btn" onclick="openModal('quests-modal')">🎯 Objetivos</button>
           <button class="sidebar-btn" onclick="openModal('inventory-modal')">🎒 Inventário</button>
           <button class="sidebar-btn" onclick="openModal('map-modal')">🗺️ Mapa</button>
         </div>
@@ -47,11 +53,20 @@
         </div>
       </aside>
 
+      <!-- MODAL DE OBJETIVOS (QUESTS) -->
+      <div id="quests-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeModal('quests-modal')">&times;</span>
+          <h3>🎯 Objetivos Ativos</h3>
+          <div id="quests-container" style="margin-top: 15px; text-align: left;"></div>
+        </div>
+      </div>
+
       <!-- MODAL DE INVENTÁRIO -->
       <div id="inventory-modal" class="modal">
         <div class="modal-content">
           <span class="close-btn" onclick="closeModal('inventory-modal')">&times;</span>
-          <h3>Seus Itens</h3>
+          <h3>🎒 Seus Itens</h3>
           <div id="inventory-items-container"></div>
         </div>
       </div>
@@ -60,7 +75,7 @@
       <div id="map-modal" class="modal">
         <div class="modal-content">
           <span class="close-btn" onclick="closeModal('map-modal')">&times;</span>
-          <h3>Selecione um Destino</h3>
+          <h3>🗺️ Selecione um Destino</h3>
           <div class="map-container">
             <img src="/images/map.jpg" id="map-image" alt="Mapa">
             <button class="map-point" style="top: 30%; left: 25%;" onclick="travelTo('start')">📍 Início</button>
