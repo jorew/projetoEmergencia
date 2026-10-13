@@ -3,7 +3,7 @@
   // ================= 1. NARRATIVA DE ENTRADA =================
   start: {
     speaker: "Eu",
-    background: "../cenarios/testandoCL.png",
+    background: "../cenarios/Cena1.png",
     character: null,
     text: [
       { text: "Eu nunca entendi muito bem..."},
@@ -130,7 +130,7 @@
 
   Exp_quarto: {
     type: "explore",
-    background: "../cenarios/Quarto.jpg",
+    background: "../cenarios/Quarto.png",
     hotspots: [
       {
         label: "🚪 Porta",
