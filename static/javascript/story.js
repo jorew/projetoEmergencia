@@ -148,7 +148,7 @@
       {
         label: "🛏️ Cama",
         top: "70%",
-        right: "40%",
+        left: "10%",
         next: "Pegar_mala"
 
 
