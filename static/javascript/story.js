@@ -130,7 +130,7 @@
 
   Exp_quarto: {
     type: "explore",
-    background: "../cenarios/Quarto.png",
+    background: "../cenarios/Quarto.jpg",
     hotspots: [
       {
         label: "🚪 Porta",
