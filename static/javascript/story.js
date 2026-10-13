@@ -134,21 +134,21 @@
     hotspots: [
       {
         label: "🚪 Porta",
-        top: "50%",
-        right: "75%",
+        top: "60%",
+        left: "75%",
         next: "Exp_sala"
 
       }, // Porta
       {
         label: "🗄️ Closet",
         top: "50%",
-        right: "85%",
+        left: "80%",
         next: "Fazer_mala"
       }, // Guarda-roupa
       {
         label: "🛏️ Cama",
-        top: "30%",
-        left: "70%",
+        top: "70%",
+        right: "70%",
         next: "Pegar_mala"
 
 
