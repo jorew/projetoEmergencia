@@ -45,7 +45,7 @@
     background: "../cenarios/Cozinha.png",
     characters: [
       { id: "james", src: "../personagens/JamesAnistonC.png", position: "left" },
-      { id: "yohanna", src: "/images/yohanna.png", position: "right" }
+      { id: "yohanna", src: "../personagens/Yohannavirada.png", position: "right" }
     ],
     text: [
       // FALAS DO JAMES
@@ -112,7 +112,7 @@
 
   noticia: {
     speaker: "James",
-    background: null, // Jornal da Notícia que mostra a banda
+    background: "../cenarios/Cena3.jpg", // Jornal da Notícia que mostra a banda
     character: null,
     text: [
       { text: "Os fãs da banda lamentam, alguns nem sabem que os membros faleceram, alguns pensam até que eles ainda estão vivos. E tem aqueles que só querem curtir, não estão nem vendo."},
