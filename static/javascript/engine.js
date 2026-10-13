@@ -10,6 +10,86 @@ let typeWriterTimer = null;
 let isTyping = false;
 let currentSaveMode = "save";
 
+// ====================== MÓDULO DE ÁUDIO & SOM ======================
+let audioState = {
+  bgmEnabled: true,
+  voiceEnabled: true,
+  currentBgmSrc: null
+};
+
+const bgmPlayer = new Audio();
+bgmPlayer.loop = true;
+bgmPlayer.volume = 0.4;
+
+const voicePlayer = new Audio();
+voicePlayer.volume = 0.9;
+
+function playBGM(src) {
+  if (!src) return;
+  if (audioState.currentBgmSrc === src && !bgmPlayer.paused) return;
+
+  audioState.currentBgmSrc = src;
+  bgmPlayer.src = src;
+
+  if (audioState.bgmEnabled) {
+    bgmPlayer.play().catch(e => console.log("Autoplay BGM bloqueado:", e));
+  }
+}
+
+function stopBGM() {
+  bgmPlayer.pause();
+  audioState.currentBgmSrc = null;
+}
+
+function toggleBGM() {
+  audioState.bgmEnabled = !audioState.bgmEnabled;
+  const btn = document.getElementById("btn-toggle-bgm");
+
+  if (audioState.bgmEnabled) {
+    if (btn) {
+      btn.textContent = "🎵 Música: LIGADA";
+      btn.classList.remove("muted");
+    }
+    if (audioState.currentBgmSrc) {
+      bgmPlayer.play().catch(e => console.log(e));
+    }
+  } else {
+    if (btn) {
+      btn.textContent = "🎵 Música: DESLIGADA";
+      btn.classList.add("muted");
+    }
+    bgmPlayer.pause();
+  }
+}
+
+function playVoice(src) {
+  voicePlayer.pause();
+  voicePlayer.currentTime = 0;
+
+  if (!src || !audioState.voiceEnabled) return;
+
+  voicePlayer.src = src;
+  voicePlayer.play().catch(e => console.log("Erro ao reproduzir voz:", e));
+}
+
+function toggleVoice() {
+  audioState.voiceEnabled = !audioState.voiceEnabled;
+  const btn = document.getElementById("btn-toggle-voice");
+
+  if (audioState.voiceEnabled) {
+    if (btn) {
+      btn.textContent = "🎙️ Vozes: LIGADAS";
+      btn.classList.remove("muted");
+    }
+  } else {
+    if (btn) {
+      btn.textContent = "🎙️ Vozes: DESLIGADAS";
+      btn.classList.add("muted");
+    }
+    voicePlayer.pause();
+  }
+}
+
 // ====================== CONTROLADOR DE TRANSIÇÃO (FADE IN/OUT) ======================
 function changeSceneWithFade(nextSceneId, resetIndex = true) {
   const overlay = document.getElementById("fade-overlay");
@@ -82,18 +162,20 @@ function startGame() {
 function restartGame() {
   clearInterval(typeWriterTimer);
   isTyping = false;
+  stopBGM();
+  voicePlayer.pause();
   const sidebar = document.getElementById("sidebar");
   if (sidebar) sidebar.classList.remove("active");
   switchScreen("title-screen");
 }
 
-// ====================== OBJETIVOS (QUEST LOG) ======================
+// ====================== OBJETIVOS (QUEST LOG ATIVAS/CONCLUÍDAS) ======================
 function renderQuestsModal() {
   const container = document.getElementById("quests-container");
   if (!container) return;
 
   container.innerHTML = "";
-  let activeQuestsCount = 0;
+  let questsCount = 0;
 
   if (typeof questLog === "undefined") {
     container.innerHTML = "<p style='color:#aaa;'>Nenhum objetivo registrado no story.js.</p>";
@@ -103,23 +185,34 @@ function renderQuestsModal() {
   Object.keys(questLog).forEach(key => {
     const quest = questLog[key];
 
-    // O objetivo aparece se a flag correspondente estiver ativa no state
+    // Exibe a missão se a flag de início estiver ativa no estado do jogador
     if (state.flags[quest.flag]) {
-      activeQuestsCount++;
-      
+      questsCount++;
+      const isCompleted = quest.completedFlag && state.flags[quest.completedFlag];
+
       const card = document.createElement("div");
-      card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
       
-      card.innerHTML = `
-        <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
-        <p style="font-size: 12px; color: #ccc; line-height: 1.4;">${quest.description}</p>
-      `;
+      if (isCompleted) {
+        // Estilo visual para missão Concluída (Verde)
+        card.style.cssText = "background: #1b3b22; border-left: 4px solid #2ed573; padding: 12px; margin-bottom: 10px; border-radius: 4px; opacity: 0.85;";
+        card.innerHTML = `
+          <h4 style="color: #2ed573; margin-bottom: 4px; font-size: 14px; text-decoration: line-through;">✅ ${quest.title} (Concluído)</h4>
+          <p style="font-size: 12px; color: #aaa; line-height: 1.4;">${quest.description}</p>
+        `;
+      } else {
+        // Estilo visual para missão Em Andamento (Rosa/Destaque)
+        card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
+        card.innerHTML = `
+          <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
+          <p style="font-size: 12px; color: #ccc; line-height: 1.4;">${quest.description}</p>
+        `;
+      }
       
       container.appendChild(card);
     }
   });
 
-  if (activeQuestsCount === 0) {
+  if (questsCount === 0) {
     container.innerHTML = "<p style='color:#aaa; text-align:center;'>Nenhum objetivo ativo no momento.</p>";
   }
 }
@@ -191,9 +284,17 @@ function showScene(id, resetIndex = true) {
   state.current = id;
   if (resetIndex) state.textIndex = 0;
 
-  updateHUD(); // Atualiza o saldo financeiro na interface
+  updateHUD();
 
-  const bg = document.getElementById("background");
+  // GESTÃO DE ÁUDIO DE FUNDO (BGM)
+  if (scene.bgm) {
+    playBGM(scene.bgm);
+  } else if (scene.bgm === null) {
+    stopBGM();
+  }
+
+  const bgImg = document.getElementById("background");
+  const bgVideo = document.getElementById("background-video");
   const textbox = document.getElementById("textbox");
   const hotspotsLayer = document.getElementById("hotspots-layer");
   const minigameContainer = document.getElementById("minigame-container");
@@ -201,11 +302,35 @@ function showScene(id, resetIndex = true) {
   if (hotspotsLayer) hotspotsLayer.innerHTML = "";
   if (minigameContainer) minigameContainer.style.display = "none";
 
+  // TRATAMENTO DUAL DE FUNDO (IMAGEM OU VÍDEO)
   if (scene.background) {
-    bg.src = scene.background;
-    bg.style.display = "block";
+    const isVideo = scene.background.endsWith(".mp4") || 
+                    scene.background.endsWith(".webm") || 
+                    scene.background.endsWith(".ogv");
+
+    if (isVideo) {
+      if (bgImg) bgImg.style.display = "none";
+      if (bgVideo) {
+        bgVideo.src = scene.background;
+        bgVideo.style.display = "block";
+        bgVideo.play().catch(e => console.log("Autoplay vídeo bloqueado:", e));
+      }
+    } else {
+      if (bgVideo) {
+        bgVideo.pause();
+        bgVideo.style.display = "none";
+      }
+      if (bgImg) {
+        bgImg.src = scene.background;
+        bgImg.style.display = "block";
+      }
+    }
   } else {
-    bg.style.display = "none";
+    if (bgImg) bgImg.style.display = "none";
+    if (bgVideo) {
+      bgVideo.pause();
+      bgVideo.style.display = "none";
+    }
   }
 
   // MODO 1: MINIGAME
@@ -271,6 +396,14 @@ function renderDialogue() {
   const currentSpeaker = typeof currentItem === 'object' && currentItem.speaker ? currentItem.speaker : (scene.speaker || "");
   const currentEmotion = typeof currentItem === 'object' && currentItem.emotion ? currentItem.emotion : (scene.emotion || 'neutral');
   const activeCharId = typeof currentItem === 'object' ? currentItem.activeChar : null;
+  const currentVoice = typeof currentItem === 'object' ? currentItem.voice : null;
+
+  // REPRODUÇÃO DE DUBLAGEM / VOZ
+  if (currentVoice) {
+    playVoice(currentVoice);
+  } else {
+    voicePlayer.pause();
+  }
 
   document.getElementById("speaker").textContent = currentSpeaker;
 
@@ -315,7 +448,6 @@ function finishTyping(dialogueList, scene, choicesDiv) {
       const btn = document.createElement("button");
       btn.className = "choice-btn";
       
-      // Se a escolha tiver custo financeiro, inclui no texto do botão
       let btnLabel = choice.text;
       if (choice.cost) {
         btnLabel += ` [💰 -$${choice.cost}]`;
@@ -325,13 +457,11 @@ function finishTyping(dialogueList, scene, choicesDiv) {
       btn.onclick = (e) => {
         e.stopPropagation();
 
-        // Validação de dinheiro suficiente
         if (choice.cost && state.money < choice.cost) {
           showStatus("Dinheiro insuficiente!");
           return;
         }
 
-        // Aplica dedução ou recompensa
         if (choice.cost) addMoney(-choice.cost);
         if (choice.reward) addMoney(choice.reward);
 
