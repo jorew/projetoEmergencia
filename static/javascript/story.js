@@ -3,7 +3,7 @@
   // ================= 1. NARRATIVA DE ENTRADA =================
   start: {
     speaker: "Eu",
-    background: "../cenarios/cena1.png",
+    background: "../cenarios/testandoCL.png",
     character: null,
     text: [
       { text: "Eu nunca entendi muito bem..."},
