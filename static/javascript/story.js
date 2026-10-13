@@ -118,13 +118,35 @@
       { text: "Os fãs da banda lamentam, alguns nem sabem que os membros faleceram, alguns pensam até que eles ainda estão vivos. E tem aqueles que só querem curtir, não estão nem vendo."},
       { text: "Vendo algumas notícias, percebi que a banda atuava numa cidade conhecida por desaparecimentos repentinos, Apókryphos Town."},
       { text: "Perguntei pra minha mãe sobre, mas ela nunca fala nada a respeito. Se eu falar com qualquer outro familiar? Dá na mesma."},
-      { text: "Bem, estou de férias... tenho um bom dinheiro guardado... posso fazer uma viagem para descobrir mais sobre a Banda Amadeira. Como estou de férias acho que posso dar uma passada por lá."}
+      { text: "Bem, estou de férias... tenho um bom dinheiro guardado... posso fazer uma viagem para descobrir mais sobre a Banda Amadeira. Como estou de férias acho que posso dar uma passada por lá."},
+      { text: "Vou fazer rumo para Apókryphos Town"}
+
 
     ],
     choices: [
-      { text: "Explore", next: "dev"}
+      { text: "Explore", next: "Exp_Viagem"}
     ]
   },
+
+  Exp_Viagem: {
+    type: "explore",
+    background: "null",
+    hotspots: [
+      {}, // Porta
+      {}, // Guarda-roupa
+      {}, // Cama
+      {}, // Mala
+
+
+
+
+    ]
+
+
+
+  }
+
+
 
 
 
