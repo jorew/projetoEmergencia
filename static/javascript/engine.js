@@ -225,9 +225,9 @@ function renderInventoryModal() {
   container.innerHTML = "";
 
   const itemNames = {
-    Mala_Aniston: "🧳 Preciso para organizar a viagem",
+    Mala_Aniston: "🧳 Mala",
     tem_anotacao: "📝 Anotação com Código",
-    passagem_bus: "🚌 Passagem de Ônibus para Apókryphos"
+    passagem_bus: "🚌 Passagem de Ônibus"
   };
 
   let hasItems = false;
