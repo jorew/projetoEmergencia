@@ -133,26 +133,34 @@
     background: "../cenarios/Quarto.png",
     hotspots: [
       {
-        label: "🚪 Porta",
+        label: "🚪 Ir à sala",
         top: "60%",
         left: "70%",
-        next: "Exp_sala"
+        next: "Exp_sala" 
 
-      }, // Porta
+      }, // Porta ✅
+      {
+        label: "💻 Pc",
+        top: "48%",
+        left: "50%",
+        next: "compra_passagem"
+
+      }, // PC
       {
         label: "🗄️ Closet",
         top: "50%",
         left: "80%",
         requires: "Mala_Aniston",
         next: "Fazer_mala"
-      }, // Guarda-roupa
+      }, // Guarda-roupa ✅
       {
         label: "🛏️ Cama",
         top: "70%",
         left: "10%",
+       // requires: "passagem_bus",
         next: "Pegar_mala"
 
-      } // Cama
+      } // Cama ✅
     ]
 
   },
@@ -186,7 +194,51 @@
     choices: [
       { text: "Voltar", next: "Exp_quarto"}
     ]
-  }
+  },
+
+  Fazer_mala: {
+    speaker: "James",
+    background: "../cenarios/Quarto.png",
+    text: [
+      { text: "Preciso fazer a minha mala, com certeza preciso levar roupas."}
+    ],
+    choices: [
+      { text: "Encher a mala com produtos e roupas",
+        flag: "Mala_cheia",
+        requiresNot: "Mala_cheia",
+        next: "mala_esta_cheia"
+      },
+      { text: "Não fazer isso agora",
+        next: "Exp_quarto"
+      }
+    ]
+  },
+
+  Exp_sala: {
+    type: "explore",
+    background: "../cenarios/Sala.png",
+    hotspots: [
+      {
+        label: "🚪 Ir à cozinha",
+        top: "70%",
+        left: "70%",
+        next: "Exp_cozinha"
+      },
+      {
+        label: "🚪 Sair de casa",
+        top: "50%",
+        left: "50%",
+        requires: "Mala_cheia",
+        next: "Pegar_onibus"
+      },
+      {
+        label: "🚪 Voltar pro quarto",
+        top: "90%",
+        left: "40%",
+        next: "Exp_quarto"
+      }
+    ]
+  },
 
 
 

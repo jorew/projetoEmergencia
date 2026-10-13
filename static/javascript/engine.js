@@ -225,7 +225,8 @@ function renderInventoryModal() {
   container.innerHTML = "";
 
   const itemNames = {
-    Mala_Aniston: "🧳 Mala",
+    Mala_Aniston: "🧳 Mala (vazia)",
+    Mala_cheia: "🧳 Mala (cheia)",
     tem_anotacao: "📝 Anotação com Código",
     passagem_bus: "🚌 Passagem de Ônibus"
   };
