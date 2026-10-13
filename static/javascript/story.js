@@ -3,7 +3,7 @@
   // ================= 1. NARRATIVA DE ENTRADA =================
   start: {
     speaker: "Eu",
-    background: null,
+    background: "../cenarios/cena1.png",
     character: null,
     text: [
       { text: "Eu nunca entendi muito bem..."},
@@ -21,7 +21,7 @@
 
   certa_vez: {
     speaker: "Eu",
-    background: null,
+    background: "../cenarios/Cena2.png",
     character: null,
     text: [
       { text: "Mas teve uma certa vez que eu desci da minha cama no meio da madrugada,"},
@@ -42,9 +42,9 @@
 
 
     pergunta: {
-    background: null,
+    background: "../cenarios/Cozinha.png",
     characters: [
-      { id: "james", src: "/images/james.png", position: "left" },
+      { id: "james", src: "../personagens/JamesAnistonC.png", position: "left" },
       { id: "yohanna", src: "/images/yohanna.png", position: "right" }
     ],
     text: [
@@ -93,12 +93,12 @@
   estudo: {
     speaker: "James",
     background: null,
-    character: null,
+    character: {id: "james", src: "../personagens/JamesAniston.png", activeChar: "james"},
     text: [
-      { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz."},
-      { text: "Descobri um tempo depois que a tia Ana participava de uma banda -"},
-      { text: "conhecida como Banda Amadeira, tinha ganhado muita popularidade ultimamente. Mas que estranho, fiquei sabendo que todos os membros faleceram em um acidente."},
-      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa..."},
+      { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz.", activeChar: "james"},
+      { text: "Descobri um tempo depois que a tia Ana participava de uma banda -", activeChar: "james"},
+      { text: "conhecida como Banda Amadeira, tinha ganhado muita popularidade ultimamente. Mas que estranho, fiquei sabendo que todos os membros faleceram em um acidente.", activeChar: "james"},
+      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa...", activeChar: "james"},
 
       
     ],
@@ -112,7 +112,7 @@
 
   noticia: {
     speaker: "James",
-    background: null,
+    background: null, // Jornal da Notícia que mostra a banda
     character: null,
     text: [
       { text: "Os fãs da banda lamentam, alguns nem sabem que os membros faleceram, alguns pensam até que eles ainda estão vivos. E tem aqueles que só querem curtir, não estão nem vendo."},
@@ -124,21 +124,35 @@
 
     ],
     choices: [
-      { text: "Explore", next: "Exp_Viagem"}
+      { text: "Explore", next: "Exp_quarto"}
     ]
   },
 
-  Exp_Viagem: {
+  Exp_quarto: {
     type: "explore",
-    background: "null",
+    background: "../cenarios/Quarto.png",
     hotspots: [
-      {}, // Porta
-      {}, // Guarda-roupa
-      {}, // Cama
-      {}, // Mala
+      {
+        label: "🚪 Porta",
+        top: "50%",
+        right: "75%",
+        next: "Exp_sala"
+
+      }, // Porta
+      {
+        label: "🗄️ Closet",
+        top: "50%",
+        right: "85%",
+        next: "Fazer_mala"
+      }, // Guarda-roupa
+      {
+        label: "🛏️ Cama",
+        top: "30%",
+        left: "70%",
+        next: "Pegar_mala"
 
 
-
+      } // Cama
 
     ]
 
