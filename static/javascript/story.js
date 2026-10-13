@@ -135,7 +135,7 @@
       {
         label: "🚪 Porta",
         top: "60%",
-        left: "75%",
+        left: "70%",
         next: "Exp_sala"
 
       }, // Porta
@@ -148,7 +148,7 @@
       {
         label: "🛏️ Cama",
         top: "70%",
-        right: "70%",
+        right: "60%",
         next: "Pegar_mala"
 
 
