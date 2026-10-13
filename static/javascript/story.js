@@ -143,6 +143,7 @@
         label: "🗄️ Closet",
         top: "50%",
         left: "80%",
+        requires: "Mala_Aniston",
         next: "Fazer_mala"
       }, // Guarda-roupa
       {
@@ -151,13 +152,40 @@
         left: "10%",
         next: "Pegar_mala"
 
-
       } // Cama
-
     ]
 
+  },
 
+  Pegar_mala: {
+    speaker: "James",
+    background: "../cenarios/Quarto.png",
+    text: [
+      { text: "Ia me esquecendo da minha mala, preciso dela pra organizar minhas coisas." },
+    ],
+    choices: [
+      { text: "Pegar mala",
+        flag: "Mala_Aniston",
+        requiresNot: "Mala_Aniston",
+        next: "mala_adquirida"
 
+      },
+      { text: "Não pegar agora",
+        next: "Exp_quarto"
+      }
+    ]
+
+  },
+
+  mala_adquirida: {
+    speaker: "James",
+    background: "../cenarios/Quarto.png",
+    text: [
+      { text: "perfeito, agora eu tenho uma mala."}
+    ],
+    choices: [
+      { text: "Voltar", next: "Exp_quarto"}
+    ]
   }
 
 
