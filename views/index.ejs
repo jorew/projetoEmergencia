@@ -44,6 +44,14 @@
         </div>
 
         <div class="sidebar-header mt-15">
+          <h3>Áudio & Som</h3>
+        </div>
+        <div class="sidebar-group">
+          <button class="sidebar-btn" id="btn-toggle-bgm" onclick="toggleBGM()">🎵 Música: LIGADA</button>
+          <button class="sidebar-btn" id="btn-toggle-voice" onclick="toggleVoice()">🎙️ Vozes: LIGADAS</button>
+        </div>
+
+        <div class="sidebar-header mt-15">
           <h3>Menu</h3>
         </div>
         <div class="sidebar-group">
@@ -95,7 +103,11 @@
 
       <!-- CONTEÚDO PRINCIPAL DA CENA DA HISTÓRIA -->
       <div id="scene">
-        <img id="background" src="" alt="Fundo">
+        <!-- SUPORTE A IMAGEM DE FUNDO -->
+        <img id="background" src="" alt="Fundo" style="display: none;">
+        
+        <!-- SUPORTE A VÍDEO DE FUNDO -->
+        <video id="background-video" autoplay loop muted playsinline style="display: none;"></video>
         
         <!-- CAMADA DE MÚLTIPLOS PERSONAGENS -->
         <div id="characters-layer"></div>
