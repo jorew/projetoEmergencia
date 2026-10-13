@@ -225,7 +225,7 @@ function renderInventoryModal() {
   container.innerHTML = "";
 
   const itemNames = {
-    tem_chave: "🔑 Chave de Ferro",
+    Mala_Aniston: "🧳 Preciso para organizar a viagem",
     tem_anotacao: "📝 Anotação com Código",
     passagem_bus: "🚌 Passagem de Ônibus para Apókryphos"
   };
