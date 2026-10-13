@@ -214,6 +214,18 @@
     ]
   },
 
+  mala_esta_cheia: {
+    speaker: "James",
+    background: "../cenarios/Quarto.png",
+    text: [
+      { text: "Perfeito, a mala também está cheia, agora posso ir."}
+    ],
+    choices: [
+      { text: "Voltar", next: "Exp_quarto"}
+    ]
+  },
+
+
   Exp_sala: {
     type: "explore",
     background: "../cenarios/Sala.png",
