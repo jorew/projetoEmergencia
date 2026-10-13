@@ -45,7 +45,7 @@
     background: "../cenarios/Cozinha.png",
     characters: [
       { id: "james", src: "../personagens/JamesAnistonC.png", position: "left" },
-      { id: "yohanna", src: "../personagens/Yohannavirada.png", position: "right" }
+      { id: "yohanna", src: "../personagens/YohannaVirada.png", position: "right" }
     ],
     text: [
       // FALAS DO JAMES
@@ -92,7 +92,7 @@
 
   estudo: {
     speaker: "James",
-    background: null,
+    background: "../cenarios/CenaEstudo.png",
     character: {id: "james", src: "../personagens/JamesAniston.png", activeChar: "james"},
     text: [
       { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz.", activeChar: "james"},
