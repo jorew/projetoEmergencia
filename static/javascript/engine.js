@@ -106,9 +106,9 @@ function changeSceneWithFade(nextSceneId, resetIndex = true) {
 
     setTimeout(() => {
       overlay.classList.remove("active");
-    }, 50);
+    }, 150);
 
-  }, 350);
+  }, 200);
 }
 
 // ====================== GERENCIAMENTO DE DINHEIRO ======================
@@ -130,8 +130,16 @@ function addMoney(amount) {
 
 // ====================== GERENCIAMENTO DE TELAS E INTERFACE ======================
 function switchScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  
+  const targetScreen = document.getElementById(screenId);
+  if (targetScreen) {
+    targetScreen.classList.add('active');
+    targetScreen.style.display = 'flex';
+  }
 }
 
 function toggleSidebar() {
@@ -155,8 +163,12 @@ function closeModal(modalId) {
 
 function startGame() {
   state = { current: "start", flags: {}, money: 500, textIndex: 0 };
+  
+  const overlay = document.getElementById("fade-overlay");
+  if (overlay) overlay.classList.remove("active");
+
   switchScreen("game-screen");
-  changeSceneWithFade("start");
+  showScene("start");
 }
 
 function restartGame() {
@@ -185,7 +197,6 @@ function renderQuestsModal() {
   Object.keys(questLog).forEach(key => {
     const quest = questLog[key];
 
-    // Exibe a missão se a flag de início estiver ativa no estado do jogador
     if (state.flags[quest.flag]) {
       questsCount++;
       const isCompleted = quest.completedFlag && state.flags[quest.completedFlag];
@@ -193,14 +204,12 @@ function renderQuestsModal() {
       const card = document.createElement("div");
       
       if (isCompleted) {
-        // Estilo visual para missão Concluída (Verde)
         card.style.cssText = "background: #1b3b22; border-left: 4px solid #2ed573; padding: 12px; margin-bottom: 10px; border-radius: 4px; opacity: 0.85;";
         card.innerHTML = `
           <h4 style="color: #2ed573; margin-bottom: 4px; font-size: 14px; text-decoration: line-through;">✅ ${quest.title} (Concluído)</h4>
           <p style="font-size: 12px; color: #aaa; line-height: 1.4;">${quest.description}</p>
         `;
       } else {
-        // Estilo visual para missão Em Andamento (Rosa/Destaque)
         card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
         card.innerHTML = `
           <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
@@ -398,7 +407,6 @@ function renderDialogue() {
   const activeCharId = typeof currentItem === 'object' ? currentItem.activeChar : null;
   const currentVoice = typeof currentItem === 'object' ? currentItem.voice : null;
 
-  // REPRODUÇÃO DE DUBLAGEM / VOZ
   if (currentVoice) {
     playVoice(currentVoice);
   } else {
