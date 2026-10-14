@@ -1,260 +1,667 @@
+// ====================== ESTADO DO JOGO ======================
+let state = {
+  current: "start",
+  flags: {},
+  money: 500, // Saldo inicial do jogador ($500)
+  textIndex: 0
+};
 
-  const story = {
-  // ================= 1. NARRATIVA DE ENTRADA =================
-  start: {
-    speaker: "Eu",
-    background: "../cenarios/Cena1.png",
-    character: null,
-    text: [
-      { text: "Eu nunca entendi muito bem..."},
-      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família."},
-      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim."},
-      { text: "Eu sou filho único da família e favorito consequentemente... hihi ~"},
-      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado."}
-    ],
-    choices: [
-      { text: "Prosseguir", next: "certa_vez"}
-    ]
-    
-  },
+let typeWriterTimer = null;
+let isTyping = false;
+let currentSaveMode = "save";
 
+// ====================== MÓDULO DE ÁUDIO & SOM ======================
+let audioState = {
+  bgmEnabled: true,
+  voiceEnabled: true,
+  currentBgmSrc: null
+};
 
-  certa_vez: {
-    speaker: "Eu",
-    background: "../cenarios/Cena2.png",
-    character: null,
-    text: [
-      { text: "Mas teve uma certa vez que eu desci da minha cama no meio da madrugada,"},
-      { text: "Escutei vozes abafadas quando cheguei perto da cozinha, a casa era grande."},
-      { text: "Minha vó, meu avô, minha mãe e o meu pai estava conversando sobre a minha tia Ana."},
-      { text: "Eu escutei o choro baixo da minha mãe... e os outros familiares incluindo meu pai -"},
-      { text: "estavam apoiando ela como podiam... pensei comigo mesmo: 'não é a primeira vez que isso acontece'."},
-      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto na mente."}
+const bgmPlayer = new Audio();
+bgmPlayer.loop = true;
+bgmPlayer.volume = 0.4;
 
-    ],
+const voicePlayer = new Audio();
+voicePlayer.volume = 0.9;
 
-    choices: [
-      { text: "Prosseguir", next: "pergunta" }
-    ]
+function playBGM(src) {
+  if (!src) return;
+  if (audioState.currentBgmSrc === src && !bgmPlayer.paused) return;
 
-  },
+  audioState.currentBgmSrc = src;
+  bgmPlayer.src = src;
 
+  if (audioState.bgmEnabled) {
+    bgmPlayer.play().catch(e => console.log("Autoplay BGM bloqueado pelo navegador:", e));
+  }
+}
 
+function stopBGM() {
+  bgmPlayer.pause();
+  audioState.currentBgmSrc = null;
+}
 
-    pergunta: {
-    background: "../cenarios/Cozinha.png",
-    characters: [
-      { id: "james", src: "../personagens/JamesAnistonC.png", position: "left" },
-      { id: "yohanna", src: "../personagens/YohannaVirada.png", position: "right" }
-    ],
-    text: [
-      // FALAS DO JAMES
-      {
-        speaker: "James",
-        text: "(Uma vez tive coragem pra perguntar pra ela)",
-        emotion: "neutral",
-        activeChar: "james"
-      },
-      {
-        speaker: "James",
-        text: "Mãe, por que eu nunca vi a tia Ana? O que houve com ela?",
-        emotion: "neutral",
-        activeChar: "james"
-      },
+function toggleBGM() {
+  audioState.bgmEnabled = !audioState.bgmEnabled;
+  const btn = document.getElementById("btn-toggle-bgm");
 
-      // FALAS DA MÃE YOHANNA
-      {
-        speaker: "Mãe Yohanna",
-        text: "Meu filho... ela foi cantar daqui até o céu (ela começava a chorar).",
-        emotion: "sad",
-        activeChar: "yohanna"
-      },
-      {
-        speaker: "Mãe Yohanna",
-        text: "(Enxugando as lágrimas) Meu filho, é melhor você focar nos estudos -",
-        emotion: "sad",
-        activeChar: "yohanna"
-      },
-      {
-        speaker: "Mãe Yohanna",
-        text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!",
-        emotion: "sad",
-        activeChar: "yohanna"
-      }
-    ],
+  if (audioState.bgmEnabled) {
+    if (btn) {
+      btn.textContent = "🎵 Música: LIGADA";
+      btn.classList.remove("muted");
+    }
+    if (audioState.currentBgmSrc) {
+      bgmPlayer.play().catch(e => console.log(e));
+    }
+  } else {
+    if (btn) {
+      btn.textContent = "🎵 Música: DESLIGADA";
+      btn.classList.add("muted");
+    }
+    bgmPlayer.pause();
+  }
+}
 
-    choices: [
-      { text: "Prosseguir", next: "estudo" }
-    ]
-  },
+function playVoice(src) {
+  voicePlayer.pause();
+  voicePlayer.currentTime = 0;
 
+  if (!src || !audioState.voiceEnabled) return;
+
+  voicePlayer.src = src;
+  voicePlayer.play().catch(e => console.log("Erro/Bloqueio ao reproduzir voz:", e));
+}
+
+function toggleVoice() {
+  audioState.voiceEnabled = !audioState.voiceEnabled;
+  const btn = document.getElementById("btn-toggle-voice");
+
+  if (audioState.voiceEnabled) {
+    if (btn) {
+      btn.textContent = "🎙️ Vozes: LIGADAS";
+      btn.classList.remove("muted");
+    }
+  } else {
+    if (btn) {
+      btn.textContent = "🎙️ Vozes: DESLIGADAS";
+      btn.classList.add("muted");
+    }
+    voicePlayer.pause();
+  }
+}
+
+// ====================== CONTROLADOR DE TRANSIÇÃO (FADE IN/OUT) ======================
+function changeSceneWithFade(nextSceneId, resetIndex = true) {
+  const overlay = document.getElementById("fade-overlay");
   
+  if (!overlay) {
+    showScene(nextSceneId, resetIndex);
+    return;
+  }
 
-  estudo: {
-    speaker: "James",
-    background: "../cenarios/CenaEstudo.png",
-    character: {id: "james", src: "../personagens/JamesAniston.png", activeChar: "james"},
-    text: [
-      { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz.", activeChar: "james"},
-      { text: "Descobri um tempo depois que a tia Ana participava de uma banda -", activeChar: "james"},
-      { text: "conhecida como Banda Amadeira, tinha ganhado muita popularidade ultimamente. Mas que estranho, fiquei sabendo que todos os membros faleceram em um acidente.", activeChar: "james"},
-      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa...", activeChar: "james"},
+  overlay.classList.add("active");
 
+  setTimeout(() => {
+    showScene(nextSceneId, resetIndex);
+
+    setTimeout(() => {
+      overlay.classList.remove("active");
+    }, 50);
+
+  }, 200);
+}
+
+// ====================== GERENCIAMENTO DE DINHEIRO ======================
+function updateHUD() {
+  const moneyEl = document.getElementById("money-display");
+  if (moneyEl) {
+    moneyEl.textContent = `💰 $${state.money}`;
+  }
+}
+
+function addMoney(amount) {
+  state.money += amount;
+  if (state.money < 0) state.money = 0;
+  
+  updateHUD();
+  const sign = amount >= 0 ? "+" : "";
+  showStatus(`Dinheiro: ${sign}$${amount} (Total: $${state.money})`);
+}
+
+// ====================== GERENCIAMENTO DE TELAS E INTERFACE ======================
+function switchScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) target.classList.add('active');
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.toggle("active");
+}
+
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    if (modalId === "inventory-modal") renderInventoryModal();
+    if (modalId === "quests-modal") renderQuestsModal();
+    modal.classList.add("active");
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.classList.remove("active");
+}
+
+function startGame() {
+  state = { current: "start", flags: {}, money: 500, textIndex: 0 };
+  
+  const overlay = document.getElementById("fade-overlay");
+  if (overlay) overlay.classList.remove("active");
+
+  switchScreen("game-screen");
+  showScene("start", true);
+}
+
+function restartGame() {
+  clearInterval(typeWriterTimer);
+  isTyping = false;
+  stopBGM();
+  voicePlayer.pause();
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.remove("active");
+  switchScreen("title-screen");
+}
+
+// ====================== OBJETIVOS (QUEST LOG ATIVAS/CONCLUÍDAS) ======================
+function renderQuestsModal() {
+  const container = document.getElementById("quests-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+  let questsCount = 0;
+
+  if (typeof questLog === "undefined") {
+    container.innerHTML = "<p style='color:#aaa;'>Nenhum objetivo registrado no story.js.</p>";
+    return;
+  }
+
+  Object.keys(questLog).forEach(key => {
+    const quest = questLog[key];
+
+    if (state.flags[quest.flag]) {
+      questsCount++;
+      const isCompleted = quest.completedFlag && state.flags[quest.completedFlag];
+
+      const card = document.createElement("div");
       
-    ],
-    choices: [
-      { text: "Prosseguir", next: "noticia"}
-
-    ],
-
-  },
-
-
-  noticia: {
-    speaker: "James",
-    background: "../cenarios/Cena3.jpg", // Jornal da Notícia que mostra a banda
-    character: null,
-    text: [
-      { text: "Os fãs da banda lamentam, alguns nem sabem que os membros faleceram, alguns pensam até que eles ainda estão vivos. E tem aqueles que só querem curtir, não estão nem vendo."},
-      { text: "Vendo algumas notícias, percebi que a banda atuava numa cidade conhecida por desaparecimentos repentinos, Apókryphos Town."},
-      { text: "Perguntei pra minha mãe sobre, mas ela nunca fala nada a respeito. Se eu falar com qualquer outro familiar? Dá na mesma."},
-      { text: "Bem, estou de férias... tenho um bom dinheiro guardado... posso fazer uma viagem para descobrir mais sobre a Banda Amadeira. Como estou de férias acho que posso dar uma passada por lá."},
-      { text: "Vou fazer rumo para Apókryphos Town"}
-
-
-    ],
-    choices: [
-      { text: "Explore", next: "Exp_quarto"}
-    ]
-  },
-
-  Exp_quarto: {
-    type: "explore",
-    background: "../cenarios/Quarto.png",
-    hotspots: [
-      {
-        label: "🚪 Ir à sala",
-        top: "60%",
-        left: "70%",
-        next: "Exp_sala" 
-
-      }, // Porta ✅
-      {
-        label: "💻 Pc",
-        top: "48%",
-        left: "50%",
-        action: () => {
-          applySavedWallpaper(); // Carrega o papel de parede atual do state.laptopWallpaper
-          openModal("laptop-modal"); // Exibe a interface do OS na tela
-
-      }, // PC
-      {
-        label: "🗄️ Closet",
-        top: "50%",
-        left: "80%",
-        requires: "Mala_Aniston",
-        next: "Fazer_mala"
-      }, // Guarda-roupa ✅
-      {
-        label: "🛏️ Cama",
-        top: "70%",
-        left: "10%",
-        next: "Pegar_mala"
-
-      } // Cama ✅
-    ]
-
-  },
-
-  Pegar_mala: {
-    speaker: "James",
-    background: "../cenarios/Quarto.png",
-    text: [
-      { text: "Ia me esquecendo da minha mala, preciso dela pra organizar minhas coisas." },
-    ],
-    choices: [
-      { text: "Pegar mala",
-        flag: "Mala_Aniston",
-        requiresNot: "Mala_Aniston",
-        next: "mala_adquirida"
-
-      },
-      { text: "Não pegar agora",
-        next: "Exp_quarto"
+      if (isCompleted) {
+        card.style.cssText = "background: #1b3b22; border-left: 4px solid #2ed573; padding: 12px; margin-bottom: 10px; border-radius: 4px; opacity: 0.85;";
+        card.innerHTML = `
+          <h4 style="color: #2ed573; margin-bottom: 4px; font-size: 14px; text-decoration: line-through;">✅ ${quest.title} (Concluído)</h4>
+          <p style="font-size: 12px; color: #aaa; line-height: 1.4;">${quest.description}</p>
+        `;
+      } else {
+        card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
+        card.innerHTML = `
+          <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
+          <p style="font-size: 12px; color: #ccc; line-height: 1.4;">${quest.description}</p>
+        `;
       }
-    ]
+      
+      container.appendChild(card);
+    }
+  });
 
-  },
+  if (questsCount === 0) {
+    container.innerHTML = "<p style='color:#aaa; text-align:center;'>Nenhum objetivo ativo no momento.</p>";
+  }
+}
 
-  mala_adquirida: {
-    speaker: "James",
-    background: "../cenarios/Quarto.png",
-    text: [
-      { text: "perfeito, agora eu tenho uma mala."}
-    ],
-    choices: [
-      { text: "Voltar", next: "Exp_quarto"}
-    ]
-  },
+// ====================== INVENTÁRIO ======================
+function renderInventoryModal() {
+  const container = document.getElementById("inventory-items-container");
+  if (!container) return;
+  
+  container.innerHTML = "";
 
-  Fazer_mala: {
-    speaker: "James",
-    background: "../cenarios/Quarto.png",
-    text: [
-      { text: "Preciso fazer a minha mala, com certeza preciso levar roupas."}
-    ],
-    choices: [
-      { text: "Encher a mala com produtos e roupas",
-        flag: "Mala_cheia",
-        requiresNot: "Mala_cheia",
-        next: "mala_esta_cheia"
-      },
-      { text: "Não fazer isso agora",
-        next: "Exp_quarto"
+  const itemNames = {
+    Mala_Aniston: "🧳 Mala (vazia)",
+    Mala_cheia: "🧳 Mala (cheia)",
+    tem_anotacao: "📝 Anotação com Código",
+    passagem_bus: "🚌 Passagem de Ônibus"
+  };
+
+  let hasItems = false;
+  Object.keys(state.flags).forEach(flag => {
+    if (state.flags[flag] && itemNames[flag]) {
+      hasItems = true;
+      const card = document.createElement("div");
+      card.style.cssText = "background:#0f3460; border:1px solid #e94560; padding:8px 12px; border-radius:4px; margin:4px; display:inline-block;";
+      card.textContent = itemNames[flag];
+      container.appendChild(card);
+    }
+  });
+
+  if (!hasItems) {
+    container.innerHTML = "<p style='color:#aaa;'>Seu inventário está vazio.</p>";
+  }
+}
+
+// ====================== RENDERIZAÇÃO DE PERSONAGENS ======================
+function renderCharacters(scene, activeCharId) {
+  const container = document.getElementById("characters-layer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  // Trata quando scene.character é uma string simples de caminho de imagem
+  if (scene.character && typeof scene.character === 'string') {
+    const img = document.createElement("img");
+    img.src = scene.character;
+    img.className = "character-sprite pos-center speaking";
+    container.appendChild(img);
+    return;
+  }
+
+  // Trata quando scene.character é um objeto {id: '...', src: '...'}
+  if (scene.character && typeof scene.character === 'object') {
+    const img = document.createElement("img");
+    img.src = scene.character.src || scene.character.url;
+    img.className = "character-sprite pos-center speaking";
+    container.appendChild(img);
+    return;
+  }
+
+  // Trata array de múltiplos personagens
+  if (scene.characters && Array.isArray(scene.characters)) {
+    scene.characters.forEach(char => {
+      const img = document.createElement("img");
+      img.src = char.src;
+      img.className = `character-sprite pos-${char.position || 'center'}`;
+
+      if (char.id === activeCharId || scene.characters.length === 1) {
+        img.classList.add("speaking");
       }
-    ]
-  },
 
-  mala_esta_cheia: {
-    speaker: "James",
-    background: "../cenarios/Quarto.png",
-    text: [
-      { text: "Perfeito, a mala também está cheia, agora posso ir."}
-    ],
-    choices: [
-      { text: "Voltar", next: "Exp_quarto"}
-    ]
-  },
+      container.appendChild(img);
+    });
+  }
+}
 
+// ====================== MOTOR DAS CENAS ======================
+function showScene(id, resetIndex = true) {
+  const scene = story[id];
+  if (!scene) {
+    console.error(`Cena "${id}" não encontrada no story.js`);
+    return;
+  }
 
-  Exp_sala: {
-    type: "explore",
-    background: "../cenarios/Sala.png",
-    hotspots: [
-      {
-        label: "🚪 Ir à cozinha",
-        top: "70%",
-        left: "70%",
-        next: "Exp_cozinha"
-      },
-      {
-        label: "🚪 Sair de casa",
-        top: "50%",
-        left: "50%",
-        requires: ["Mala_cheia", "passagem_bus"],
-        next: "Pegar_onibus"
-      },
-      {
-        label: "🚪 Voltar pro quarto",
-        top: "90%",
-        left: "40%",
-        next: "Exp_quarto"
+  state.current = id;
+  if (resetIndex) state.textIndex = 0;
+
+  updateHUD();
+
+  // GESTÃO DE ÁUDIO DE FUNDO (BGM)
+  if (scene.bgm) {
+    playBGM(scene.bgm);
+  } else if (scene.bgm === null) {
+    stopBGM();
+  }
+
+  const bgImg = document.getElementById("background");
+  const bgVideo = document.getElementById("background-video");
+  const textbox = document.getElementById("textbox");
+  const hotspotsLayer = document.getElementById("hotspots-layer");
+  const minigameContainer = document.getElementById("minigame-container");
+
+  if (hotspotsLayer) hotspotsLayer.innerHTML = "";
+  if (minigameContainer) minigameContainer.style.display = "none";
+
+  // TRATAMENTO DUAL DE FUNDO (IMAGEM OU VÍDEO)
+  if (scene.background) {
+    const bgSrc = scene.background;
+    const isVideo = bgSrc.endsWith(".mp4") || bgSrc.endsWith(".webm") || bgSrc.endsWith(".ogv");
+
+    if (isVideo) {
+      if (bgImg) bgImg.style.display = "none";
+      if (bgVideo) {
+        bgVideo.src = bgSrc;
+        bgVideo.style.display = "block";
+        bgVideo.play().catch(e => console.log("Autoplay vídeo bloqueado:", e));
       }
-    ]
-  },
+    } else {
+      if (bgVideo) {
+        bgVideo.pause();
+        bgVideo.style.display = "none";
+      }
+      if (bgImg) {
+        bgImg.src = bgSrc;
+        bgImg.style.display = "block";
+      }
+    }
+  } else {
+    if (bgImg) bgImg.style.display = "none";
+    if (bgVideo) {
+      bgVideo.pause();
+      bgVideo.style.display = "none";
+    }
+  }
 
+  // MODO 1: MINIGAME
+  if (scene.type === "minigame") {
+    if (textbox) textbox.style.display = "none";
 
+    if (typeof startMinigame === "function") {
+      startMinigame(scene.gameId, (resultado) => {
+        if (resultado === "win") {
+          state.flags[`${scene.gameId}_cleared`] = true;
+          changeSceneWithFade(scene.onSuccess);
+        } else if (resultado === "fail") {
+          changeSceneWithFade(scene.onFailure);
+        } else {
+          changeSceneWithFade(scene.onCancel || state.current);
+        }
+      });
+    } else {
+      console.error("A função startMinigame não está disponível no minigames.js");
+    }
+    return;
+  }
 
+  // MODO 2: CENA DE EXPLORAÇÃO (HOTSPOTS)
+  if (scene.type === "explore") {
+    if (textbox) textbox.style.display = "none";
 
+    if (scene.hotspots && hotspotsLayer) {
+      scene.hotspots.forEach(spot => {
+        if (spot.requires && !state.flags[spot.requires]) return;
+        if (spot.requiresNot && state.flags[spot.requiresNot]) return;
 
+        const btn = document.createElement("button");
+        btn.className = "hotspot";
+        btn.style.top = spot.top;
+        btn.style.left = spot.left;
+        btn.textContent = spot.label;
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          if (spot.flag) state.flags[spot.flag] = true;
+          if (spot.reward) addMoney(spot.reward);
+          
+          if (typeof spot.action === "function") {
+            spot.action();
+          }
+
+          if (spot.next) {
+            changeSceneWithFade(spot.next);
+          }
+        };
+        hotspotsLayer.appendChild(btn);
+      });
+    }
+  } 
+  // MODO 3: NARRATIVA NORMAL / DIÁLOGO
+  else {
+    if (textbox) textbox.style.display = "block";
+    renderDialogue();
+  }
+}
+
+function renderDialogue() {
+  const scene = story[state.current];
+  if (!scene) return;
+
+  const choicesDiv = document.getElementById("choices");
+  const textDiv = document.getElementById("text");
+
+  const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
+  const currentItem = dialogueList[state.textIndex];
+
+  if (!currentItem) return;
+
+  const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
+  const currentSpeaker = typeof currentItem === 'object' && currentItem.speaker ? currentItem.speaker : (scene.speaker || "");
+  const currentEmotion = typeof currentItem === 'object' && currentItem.emotion ? currentItem.emotion : (scene.emotion || 'neutral');
+  const activeCharId = typeof currentItem === 'object' ? currentItem.activeChar : null;
+  const currentVoice = typeof currentItem === 'object' ? currentItem.voice : null;
+
+  // REPRODUÇÃO DE DUBLAGEM / VOZ
+  if (currentVoice) {
+    playVoice(currentVoice);
+  } else {
+    voicePlayer.pause();
+  }
+
+  const speakerEl = document.getElementById("speaker");
+  if (speakerEl) speakerEl.textContent = currentSpeaker;
+
+  renderCharacters(scene, activeCharId);
+
+  if (textDiv) {
+    textDiv.className = "";
+    if (currentEmotion) {
+      textDiv.classList.add(`emotion-${currentEmotion}`);
+    }
+  }
+
+  if (choicesDiv) choicesDiv.innerHTML = "";
+  clearInterval(typeWriterTimer);
+
+  if (textDiv) textDiv.textContent = "";
+  let charIndex = 0;
+  isTyping = true;
+
+  typeWriterTimer = setInterval(() => {
+    if (charIndex < currentText.length) {
+      if (textDiv) textDiv.textContent += currentText.charAt(charIndex);
+      charIndex++;
+    } else {
+      finishTyping(dialogueList, scene, choicesDiv);
+    }
+  }, 30);
+}
+
+function finishTyping(dialogueList, scene, choicesDiv) {
+  clearInterval(typeWriterTimer);
+  isTyping = false;
+
+  const textDiv = document.getElementById("text");
+  const currentItem = dialogueList[state.textIndex];
+  const currentText = typeof currentItem === 'object' ? currentItem.text : currentItem;
+  
+  if (textDiv) textDiv.textContent = currentText;
+
+  if (!choicesDiv) return;
+
+  if (state.textIndex >= dialogueList.length - 1) {
+    choicesDiv.innerHTML = "";
+    
+    if (scene.choices && Array.isArray(scene.choices)) {
+      scene.choices.forEach(choice => {
+        if (choice.requires && !state.flags[choice.requires]) return;
+        if (choice.requiresNot && state.flags[choice.requiresNot]) return;
+
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        
+        let btnLabel = choice.text;
+        if (choice.cost) {
+          btnLabel += ` [💰 -$${choice.cost}]`;
+        }
+        btn.textContent = btnLabel;
+
+        btn.onclick = (e) => {
+          e.stopPropagation();
+
+          if (choice.cost && state.money < choice.cost) {
+            showStatus("Dinheiro insuficiente!");
+            return;
+          }
+
+          if (choice.cost) addMoney(-choice.cost);
+          if (choice.reward) addMoney(choice.reward);
+
+          if (choice.flag) state.flags[choice.flag] = true;
+
+          if (typeof choice.action === "function") {
+            choice.action();
+          }
+
+          if (choice.next === "restart") {
+            restartGame();
+          } else if (choice.next) {
+            changeSceneWithFade(choice.next);
+          }
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
+  } else {
+    choicesDiv.innerHTML = "<small style='color:#aaa; cursor:pointer;'>Clique no texto para continuar...</small>";
+  }
+}
+
+function advanceDialogue() {
+  const scene = story[state.current];
+  if (!scene || scene.type === "explore" || scene.type === "minigame") return;
+
+  const dialogueList = Array.isArray(scene.text) ? scene.text : [scene.text];
+
+  if (isTyping) {
+    finishTyping(dialogueList, scene, document.getElementById("choices"));
+    return;
+  }
+
+  if (state.textIndex < dialogueList.length - 1) {
+    state.textIndex++;
+    renderDialogue();
+  }
+}
+
+// Vincula o evento de clique na caixa de texto
+window.addEventListener('DOMContentLoaded', () => {
+  const textbox = document.getElementById("textbox");
+  if (textbox) {
+    textbox.addEventListener("click", advanceDialogue);
+  }
+});
+
+function travelTo(sceneId) {
+  closeModal("map-modal");
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar) sidebar.classList.remove("active");
+  changeSceneWithFade(sceneId);
+}
+
+// ====================== SAVE / LOAD POR SLOTS ======================
+function openSaveLoadModal(mode) {
+  currentSaveMode = mode;
+  const titleEl = document.getElementById("saveload-title");
+  if (titleEl) titleEl.textContent = mode === "save" ? "Salvar Jogo" : "Carregar Jogo";
+  
+  if (mode === "load") {
+    switchScreen("game-screen");
+  }
+
+  renderSaveSlots();
+  openModal("saveload-modal");
+}
+
+function closeSaveModal() {
+  closeModal("saveload-modal");
+  if (currentSaveMode === "load" && (!state.current || (state.current === "start" && document.getElementById("text").textContent === ""))) {
+    switchScreen("title-screen");
+  }
+}
+
+function getSavedSlots() {
+  const data = localStorage.getItem("vn_slots_save");
+  return data ? JSON.parse(data) : {};
+}
+
+function renderSaveSlots() {
+  const container = document.getElementById("slots-grid");
+  if (!container) return;
+  
+  container.innerHTML = "";
+  const slots = getSavedSlots();
+
+  for (let i = 1; i <= 8; i++) {
+    const slotData = slots[i];
+    const slotDiv = document.createElement("div");
+    slotDiv.className = "save-slot";
+
+    if (slotData) {
+      slotDiv.innerHTML = `
+        <div class="slot-number">${i}</div>
+        <div class="slot-info">
+          <div class="slot-scene">${slotData.sceneName || 'Cena ' + slotData.current}</div>
+          <div class="slot-date">${slotData.date}</div>
+        </div>
+        <span class="slot-delete" onclick="deleteSlot(event, ${i})">✖</span>
+      `;
+      slotDiv.onclick = () => handleSlotClick(i, slotData);
+    } else {
+      slotDiv.innerHTML = `
+        <div class="slot-number">${i}</div>
+        <div class="slot-info">
+          <div class="slot-scene" style="color:#666;">-- VAZIO --</div>
+        </div>
+      `;
+      slotDiv.onclick = () => handleSlotClick(i, null);
+    }
+
+    container.appendChild(slotDiv);
+  }
+}
+
+function handleSlotClick(slotIndex, slotData) {
+  if (currentSaveMode === "save") {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString() + " " + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    
+    const slots = getSavedSlots();
+    slots[slotIndex] = {
+      ...state,
+      date: dateStr,
+      sceneName: "Cena: " + state.current
+    };
+
+    localStorage.setItem("vn_slots_save", JSON.stringify(slots));
+    renderSaveSlots();
+    closeModal("saveload-modal");
+    showStatus("Jogo Salvo no Slot " + slotIndex);
+  } else {
+    if (slotData) {
+      state = { ...slotData };
+      if (typeof state.money === "undefined") state.money = 500;
+      closeModal("saveload-modal");
+      
+      const sidebar = document.getElementById("sidebar");
+      if (sidebar) sidebar.classList.remove("active");
+      
+      switchScreen("game-screen");
+      changeSceneWithFade(state.current, false);
+      showStatus("Jogo Carregado do Slot " + slotIndex);
+    } else {
+      showStatus("Slot vazio!");
+    }
+  }
+}
+
+function deleteSlot(event, slotIndex) {
+  event.stopPropagation();
+  const slots = getSavedSlots();
+  delete slots[slotIndex];
+  localStorage.setItem("vn_slots_save", JSON.stringify(slots));
+  renderSaveSlots();
+}
+
+function showStatus(msg) {
+  const el = document.getElementById("status");
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(() => el.style.display = "none", 1800);
 }
