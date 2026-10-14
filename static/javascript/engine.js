@@ -3,8 +3,7 @@ let state = {
   current: "start",
   flags: {},
   money: 500, // Saldo inicial do jogador ($500)
-  textIndex: 0,
-  laptopWallpaper: "linear-gradient(135deg, #1e1e2f, #0f3460)" // Wallpaper padrão do notebook
+  textIndex: 0
 };
 
 let typeWriterTimer = null;
@@ -145,7 +144,6 @@ function openModal(modalId) {
   if (modal) {
     if (modalId === "inventory-modal") renderInventoryModal();
     if (modalId === "quests-modal") renderQuestsModal();
-    if (modalId === "laptop-modal") applySavedWallpaper();
     modal.classList.add("active");
   }
 }
@@ -156,13 +154,7 @@ function closeModal(modalId) {
 }
 
 function startGame() {
-  state = { 
-    current: "start", 
-    flags: {}, 
-    money: 500, 
-    textIndex: 0,
-    laptopWallpaper: "linear-gradient(135deg, #1e1e2f, #0f3460)"
-  };
+  state = { current: "start", flags: {}, money: 500, textIndex: 0 };
   switchScreen("game-screen");
   changeSceneWithFade("start");
 }
@@ -193,6 +185,7 @@ function renderQuestsModal() {
   Object.keys(questLog).forEach(key => {
     const quest = questLog[key];
 
+    // Exibe a missão se a flag de início estiver ativa no estado do jogador
     if (state.flags[quest.flag]) {
       questsCount++;
       const isCompleted = quest.completedFlag && state.flags[quest.completedFlag];
@@ -200,12 +193,14 @@ function renderQuestsModal() {
       const card = document.createElement("div");
       
       if (isCompleted) {
+        // Estilo visual para missão Concluída (Verde)
         card.style.cssText = "background: #1b3b22; border-left: 4px solid #2ed573; padding: 12px; margin-bottom: 10px; border-radius: 4px; opacity: 0.85;";
         card.innerHTML = `
           <h4 style="color: #2ed573; margin-bottom: 4px; font-size: 14px; text-decoration: line-through;">✅ ${quest.title} (Concluído)</h4>
           <p style="font-size: 12px; color: #aaa; line-height: 1.4;">${quest.description}</p>
         `;
       } else {
+        // Estilo visual para missão Em Andamento (Rosa/Destaque)
         card.style.cssText = "background: #0f3460; border-left: 4px solid #e94560; padding: 12px; margin-bottom: 10px; border-radius: 4px;";
         card.innerHTML = `
           <h4 style="color: #e94560; margin-bottom: 4px; font-size: 14px;">📌 ${quest.title}</h4>
@@ -230,10 +225,9 @@ function renderInventoryModal() {
   container.innerHTML = "";
 
   const itemNames = {
-    Mala_Aniston: "🧳 Mala (vazia)",
-    Mala_cheia: "🧳 Mala (cheia)",
+    tem_chave: "🔑 Chave de Ferro",
     tem_anotacao: "📝 Anotação com Código",
-    passagem_bus: "🚌 Passagem de Ônibus"
+    passagem_bus: "🚌 Passagem de Ônibus para Apókryphos"
   };
 
   let hasItems = false;
@@ -250,73 +244,6 @@ function renderInventoryModal() {
   if (!hasItems) {
     container.innerHTML = "<p style='color:#aaa;'>Seu inventário está vazio.</p>";
   }
-}
-
-// ====================== MÓDULO DO NOTEBOOK / SISTEMA OPERACIONAL ======================
-function openLaptopApp(appId) {
-  document.querySelectorAll('.os-desktop .window').forEach(win => win.classList.add('hidden'));
-  const targetApp = document.getElementById(`app-${appId}`);
-  if (targetApp) {
-    targetApp.classList.remove('hidden');
-  }
-  if (appId === 'buyline') {
-    updateBuylineButton();
-  }
-}
-
-function closeLaptopApp(appId) {
-  const targetApp = document.getElementById(`app-${appId}`);
-  if (targetApp) {
-    targetApp.classList.add('hidden');
-  }
-}
-
-function changeWallpaper(styleValue) {
-  const desktop = document.getElementById('os-desktop');
-  if (desktop) {
-    desktop.style.background = styleValue;
-    desktop.style.backgroundSize = "cover";
-    desktop.style.backgroundPosition = "center";
-    state.laptopWallpaper = styleValue;
-    showStatus("Wallpaper alterado com sucesso!");
-  }
-}
-
-function applySavedWallpaper() {
-  if (state.laptopWallpaper) {
-    changeWallpaper(state.laptopWallpaper);
-  }
-}
-
-function updateBuylineButton() {
-  const btn = document.getElementById('buyline-btn');
-  if (!btn) return;
-
-  if (state.flags["passagem_comprada"]) {
-    btn.textContent = "✅ Passagem Comprada";
-    btn.classList.add("disabled");
-    btn.onclick = null;
-  } else {
-    btn.textContent = "Finalizar Compra ($150)";
-    btn.classList.remove("disabled");
-    btn.onclick = buyTicketViaBuyline;
-  }
-}
-
-function buyTicketViaBuyline() {
-  if (state.flags["passagem_comprada"]) return;
-
-  if (state.money < 150) {
-    showStatus("Dinheiro insuficiente!");
-    return;
-  }
-
-  addMoney(-150);
-  state.flags["passagem_comprada"] = true;
-  state.flags["passagem_bus"] = true; // Adiciona a passagem ao inventário
-
-  updateBuylineButton();
-  showStatus("Passagem comprada com sucesso!");
 }
 
 // ====================== RENDERIZAÇÃO DE PERSONAGENS ======================
@@ -444,14 +371,7 @@ function showScene(id, resetIndex = true) {
           e.stopPropagation();
           if (spot.flag) state.flags[spot.flag] = true;
           if (spot.reward) addMoney(spot.reward);
-          
-          if (typeof spot.action === "function") {
-            spot.action();
-          }
-
-          if (spot.next) {
-            changeSceneWithFade(spot.next);
-          }
+          changeSceneWithFade(spot.next);
         };
         hotspotsLayer.appendChild(btn);
       });
@@ -547,13 +467,9 @@ function finishTyping(dialogueList, scene, choicesDiv) {
 
         if (choice.flag) state.flags[choice.flag] = true;
 
-        if (typeof choice.action === "function") {
-          choice.action();
-        }
-
         if (choice.next === "restart") {
           restartGame();
-        } else if (choice.next) {
+        } else {
           changeSceneWithFade(choice.next);
         }
       };
@@ -672,7 +588,6 @@ function handleSlotClick(slotIndex, slotData) {
     if (slotData) {
       state = { ...slotData };
       if (typeof state.money === "undefined") state.money = 500;
-      if (typeof state.laptopWallpaper === "undefined") state.laptopWallpaper = "linear-gradient(135deg, #1e1e2f, #0f3460)";
       closeModal("saveload-modal");
       
       const sidebar = document.getElementById("sidebar");
