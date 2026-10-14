@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visual Novel Game</title>
   <link rel="stylesheet" href="/mycss/game.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -98,6 +99,88 @@
           <span class="close-btn" onclick="closeSaveModal()">&times;</span>
           <h2 id="saveload-title">Salvar Jogo</h2>
           <div class="saveload-grid" id="slots-grid"></div>
+        </div>
+      </div>
+
+      <!-- MODAL DO COMPUTADOR / LAPTOP SIMULADO -->
+      <div id="laptop-modal" class="modal">
+        <div class="laptop-frame">
+          <div class="laptop-camera"></div>
+
+          <div id="os-desktop" class="os-desktop">
+            <!-- ÍCONES DA ÁREA DE TRABALHO -->
+            <div class="desktop-icons">
+              <div class="icon" onclick="openLaptopApp('buyline')">
+                <div class="icon-box purple"><i class="fas fa-shopping-cart"></i></div>
+                <span>Buyline</span>
+              </div>
+
+              <div class="icon" onclick="openLaptopApp('settings')">
+                <div class="icon-box gray"><i class="fas fa-sliders-h"></i></div>
+                <span>Aparência</span>
+              </div>
+            </div>
+
+            <!-- APP 1: APARÊNCIA / WALLPAPER -->
+            <div id="app-settings" class="window hidden">
+              <div class="window-header">
+                <span>⚙️ Personalizar Wallpaper</span>
+                <button class="win-btn-close" onclick="closeLaptopApp('settings')">&times;</button>
+              </div>
+              <div class="window-body">
+                <p>Escolha o papel de parede:</p>
+                <div class="wallpaper-grid">
+                  <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #1e1e2f, #0f3460)')">
+                    <div class="wp-preview" style="background: linear-gradient(135deg, #1e1e2f, #0f3460);"></div>
+                    <span>Escuro Padrão</span>
+                  </div>
+                  <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #ff7e5f, #feb47b)')">
+                    <div class="wp-preview" style="background: linear-gradient(135deg, #ff7e5f, #feb47b);"></div>
+                    <span>Pôr do Sol</span>
+                  </div>
+                  <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #2b5876, #4e4376)')">
+                    <div class="wp-preview" style="background: linear-gradient(135deg, #2b5876, #4e4376);"></div>
+                    <span>Oceano</span>
+                  </div>
+                  <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #11998e, #38ef7d)')">
+                    <div class="wp-preview" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></div>
+                    <span>Aurora</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- APP 2: BUYLINE (LOJA DE PASSAGENS) -->
+            <div id="app-buyline" class="window hidden">
+              <div class="window-header purple-header">
+                <span>🛍️ Buyline - Passagens Online</span>
+                <button class="win-btn-close" onclick="closeLaptopApp('buyline')">&times;</button>
+              </div>
+              <div class="window-body">
+                <div class="ticket-card">
+                  <h3>🚌 Expresso Apókryphos Town</h3>
+                  <p class="ticket-info">Saída: Terminal Central</p>
+                  <p class="ticket-info">Assento: B12</p>
+                  <div class="ticket-price">$150,00</div>
+                  
+                  <button id="buyline-btn" class="btn-buy" onclick="buyTicketViaBuyline()">
+                    Finalizar Compra ($150)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- BARRA DE TAREFAS -->
+            <div class="taskbar">
+              <button class="start-menu-btn" onclick="closeModal('laptop-modal')">🚪 Sair do PC</button>
+              <div class="system-tray">
+                <span><i class="fas fa-volume-up"></i></span>
+                <span><i class="fas fa-wifi"></i></span>
+                <span><i class="fas fa-battery-full"></i> 100%</span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
