@@ -120,7 +120,10 @@ const story = {
         label: "💻 Pc",
         top: "48%",
         left: "50%",
-        next: "compra_passagem"
+        action: () => {
+          if (typeof applySavedWallpaper === "function") applySavedWallpaper();
+          if (typeof openModal === "function") openModal("laptop-modal");
+        }
       },
       {
         label: "🗄️ Closet",
