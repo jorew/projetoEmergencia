@@ -143,7 +143,9 @@
         label: "💻 Pc",
         top: "48%",
         left: "50%",
-        next: "compra_passagem"
+        action: () => {
+          applySavedWallpaper(); // Carrega o papel de parede atual do state.laptopWallpaper
+          openModal("laptop-modal"); // Exibe a interface do OS na tela
 
       }, // PC
       {
@@ -157,7 +159,6 @@
         label: "🛏️ Cama",
         top: "70%",
         left: "10%",
-       // requires: "passagem_bus",
         next: "Pegar_mala"
 
       } // Cama ✅
@@ -240,7 +241,7 @@
         label: "🚪 Sair de casa",
         top: "50%",
         left: "50%",
-        requires: "Mala_cheia",
+        requires: ["Mala_cheia", "passagem_bus"],
         next: "Pegar_onibus"
       },
       {
