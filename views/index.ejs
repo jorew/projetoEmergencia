@@ -3,142 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visual Novel Game</title>
+  <title>Visual Novel Engine</title>
   <link rel="stylesheet" href="/mycss/game.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <div id="game">
+  <!-- CONTAINER PRINCIPAL DO JOGO -->
+  <div id="game-container">
+    <!-- IMAGEM / VÍDEO DE FUNDO DO CENÁRIO -->
+    <div id="background-layer"></div>
 
-    <!-- TELA DE TÍTULO -->
-    <div id="title-screen" class="screen active">
-      <h1 class="game-title">Visual Novel Game</h1>
-      <div class="title-buttons">
-        <button class="choice-btn" onclick="startGame()">Novo Jogo</button>
-        <button class="choice-btn" onclick="openSaveLoadModal('load')">Carregar Jogo</button>
-      </div>
+    <!-- CAMADA DE EXPLORAÇÃO (HOTSPOTS) -->
+    <div id="explore-layer"></div>
+
+    <!-- CAIXA DE DIÁLOGO DA VISUAL NOVEL -->
+    <div id="dialog-box" class="dialog-box">
+      <div id="speaker-name" class="speaker-name"></div>
+      <div id="dialog-text" class="dialog-text"></div>
+      <div id="choices-container" class="choices-container"></div>
     </div>
 
-    <!-- TELA DE JOGO -->
-    <div id="game-screen" class="screen">
-      
-      <!-- BOTÃO FLUTUANTE DA SIDEBAR -->
-      <button id="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
-
-      <!-- HUD DE RECURSOS (DINHEIRO) -->
-      <div id="game-hud">
+    <!-- BARRA SUPERIOR DE HUD / INTERFACE -->
+    <div id="top-bar">
+      <div class="hud-stats">
         <span id="money-display">💰 $0</span>
       </div>
-
-      <!-- BARRA LATERAL (SIDEBAR) -->
-      <aside id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-          <h3>Navegação</h3>
-          <button class="close-sidebar" onclick="toggleSidebar()">&times;</button>
-        </div>
-        
-        <div class="sidebar-group">
-          <button class="sidebar-btn" onclick="openModal('quests-modal')">🎯 Objetivos</button>
-          <button class="sidebar-btn" onclick="openModal('inventory-modal')">🎒 Inventário</button>
-          <button class="sidebar-btn" onclick="openModal('map-modal')">🗺️ Mapa</button>
-        </div>
-
-        <div class="sidebar-header mt-15">
-          <h3>Áudio & Som</h3>
-        </div>
-        <div class="sidebar-group">
-          <button class="sidebar-btn" id="btn-toggle-bgm" onclick="toggleBGM()">🎵 Música: LIGADA</button>
-          <button class="sidebar-btn" id="btn-toggle-voice" onclick="toggleVoice()">🎙️ Vozes: LIGADAS</button>
-        </div>
-
-        <div class="sidebar-header mt-15">
-          <h3>Menu</h3>
-        </div>
-        <div class="sidebar-group">
-          <button class="sidebar-btn" onclick="openSaveLoadModal('save')">💾 Salvar Jogo</button>
-          <button class="sidebar-btn" onclick="openSaveLoadModal('load')">📂 Carregar Jogo</button>
-          <button class="sidebar-btn danger" onclick="restartGame()">🏠 Menu Principal</button>
-        </div>
-      </aside>
-
-      <!-- MODAL DE OBJETIVOS (QUESTS) -->
-      <div id="quests-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-btn" onclick="closeModal('quests-modal')">&times;</span>
-          <h3>🎯 Objetivos Ativos</h3>
-          <div id="quests-container" style="margin-top: 15px; text-align: left;"></div>
-        </div>
+      <div class="hud-buttons">
+        <button onclick="openModal('quests-modal')">📜 Quests</button>
+        <button onclick="openModal('inventory-modal')">🎒 Inventário</button>
+        <button onclick="openModal('settings-modal')">⚙️ Menu</button>
       </div>
-
-      <!-- MODAL DE INVENTÁRIO -->
-      <div id="inventory-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-btn" onclick="closeModal('inventory-modal')">&times;</span>
-          <h3>🎒 Seus Itens</h3>
-          <div id="inventory-items-container"></div>
-        </div>
-      </div>
-
-      <!-- MODAL DO MAPA -->
-      <div id="map-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-btn" onclick="closeModal('map-modal')">&times;</span>
-          <h3>🗺️ Selecione um Destino</h3>
-          <div class="map-container">
-            <img src="/images/map.jpg" id="map-image" alt="Mapa">
-            <button class="map-point" style="top: 30%; left: 25%;" onclick="travelTo('start')">📍 Início</button>
-            <button class="map-point" style="top: 55%; left: 60%;" onclick="travelTo('corredor')">📍 Corredor</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- MODAL DE SAVE / LOAD POR SLOTS -->
-      <div id="saveload-modal" class="modal">
-        <div class="modal-content vn-saveload-box">
-          <span class="close-btn" onclick="closeSaveModal()">&times;</span>
-          <h2 id="saveload-title">Salvar Jogo</h2>
-          <div class="saveload-grid" id="slots-grid"></div>
-        </div>
-      </div>
-
-      <!-- CONTEÚDO PRINCIPAL DA CENA DA HISTÓRIA -->
-      <div id="scene">
-        <!-- SUPORTE A IMAGEM DE FUNDO -->
-        <img id="background" src="" alt="Fundo" style="display: none;">
-        
-        <!-- SUPORTE A VÍDEO DE FUNDO -->
-        <video id="background-video" autoplay loop muted playsinline style="display: none;"></video>
-        
-        <!-- CAMADA DE MÚLTIPLOS PERSONAGENS -->
-        <div id="characters-layer"></div>
-
-        <!-- CAMADA DE TRANSIÇÃO (FADE OVERLAY) -->
-        <div id="fade-overlay"></div>
-
-        <!-- CAMADA DE EXPLORAÇÃO (HOTSPOTS CLICÁVEIS) -->
-        <div id="hotspots-layer"></div>
-
-        <!-- CONTAINER PARA MINIGAMES -->
-        <div id="minigame-container"></div>
-        
-        <!-- CAIXA DE TEXTO (FIXADA EMBAIXO) -->
-        <div id="textbox">
-          <div id="speaker"></div>
-          <div id="text"></div>
-          <div id="choices"></div>
-        </div>
-      </div>
-
     </div>
-
-    <!-- MENSAGEM FLUTUANTE DE STATUS -->
-    <div id="status"></div>
-
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- ================= MODAL: INVENTÁRIO ================= -->
+  <div id="inventory-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🎒 Seu Inventário</h2>
+        <button class="close-btn" onclick="closeModal('inventory-modal')">✕</button>
+      </div>
+      <div id="inventory-items-container" class="modal-body">
+        <!-- Itens carregados via engine.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: QUESTS ================= -->
+  <div id="quests-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📜 Diário de Quests</h2>
+        <button class="close-btn" onclick="closeModal('quests-modal')">✕</button>
+      </div>
+      <div id="quests-container" class="modal-body">
+        <!-- Quests carregadas via engine.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: LAPTOP DO PROTAGONISTA ================= -->
+  <div id="laptop-modal" class="modal">
+    <div class="laptop-frame">
+      <!-- CÂMERA DO HARDWARE DO NOTEBOOK -->
+      <div class="laptop-camera"></div>
+
+      <!-- TELA DO SISTEMA OPERACIONAL -->
+      <div id="os-desktop" class="os-desktop">
+        
+        <!-- ÍCONES DA ÁREA DE TRABALHO -->
+        <div class="desktop-icons">
+          <div class="icon" onclick="openLaptopApp('buyline')">
+            <div class="icon-box purple"><i class="fas fa-shopping-cart"></i></div>
+            <span>Buyline</span>
+          </div>
+
+          <div class="icon" onclick="openLaptopApp('settings')">
+            <div class="icon-box gray"><i class="fas fa-sliders-h"></i></div>
+            <span>Aparência</span>
+          </div>
+        </div>
+
+        <!-- JANELA: PERSONALIZAÇÃO DE WALLPAPER -->
+        <div id="app-settings" class="window hidden">
+          <div class="window-header">
+            <span>⚙️ Personalizar Wallpaper</span>
+            <button class="win-btn-close" onclick="closeLaptopApp('settings')">✕</button>
+          </div>
+          <div class="window-body">
+            <p>Escolha o papel de parede do notebook:</p>
+            <div class="wallpaper-grid">
+              <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #1e1e2f, #0f3460)')">
+                <div class="wp-preview" style="background: linear-gradient(135deg, #1e1e2f, #0f3460);"></div>
+                <span>Padrão Escuro</span>
+              </div>
+              <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #ff7e5f, #feb47b)')">
+                <div class="wp-preview" style="background: linear-gradient(135deg, #ff7e5f, #feb47b);"></div>
+                <span>Pôr do Sol</span>
+              </div>
+              <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #2b5876, #4e4376)')">
+                <div class="wp-preview" style="background: linear-gradient(135deg, #2b5876, #4e4376);"></div>
+                <span>Oceano Profundo</span>
+              </div>
+              <div class="wallpaper-card" onclick="changeWallpaper('linear-gradient(135deg, #11998e, #38ef7d)')">
+                <div class="wp-preview" style="background: linear-gradient(135deg, #11998e, #38ef7d);"></div>
+                <span>Aurora</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JANELA: BUYLINE (COMPRA DE INGRESSOS ONLINE) -->
+        <div id="app-buyline" class="window hidden">
+          <div class="window-header purple-header">
+            <span>🛍️ Buyline - Ingressos Online</span>
+            <button class="win-btn-close" onclick="closeLaptopApp('buyline')">✕</button>
+          </div>
+          <div class="window-body">
+            <div class="ticket-card">
+              <h3>🚌 Expresso Apókryphos Town</h3>
+              <p class="ticket-info">Rota: Estação Central ➔ Apókryphos</p>
+              <p class="ticket-info">Assento: B12 (Janela)</p>
+              <div class="ticket-price">$150,00</div>
+              
+              <button id="buyline-btn" class="btn-buy" onclick="buyTicketViaBuyline()">
+                Finalizar Compra ($150)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BARRA DE TAREFAS INFERIOR -->
+        <div class="taskbar">
+          <button class="start-menu-btn" onclick="closeModal('laptop-modal')">🚪 Sair do PC</button>
+          <div class="system-tray">
+            <span><i class="fas fa-volume-up"></i></span>
+            <span><i class="fas fa-wifi"></i></span>
+            <span><i class="fas fa-battery-full"></i> 100%</span>
+            <span id="os-clock">20:15</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <script src="/javascript/story.js"></script>
-  <script src="/javascript/minigames.js"></script>
   <script src="/javascript/engine.js"></script>
 </body>
 </html>
