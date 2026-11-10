@@ -114,7 +114,7 @@ const story = {
         label: "🚪 Ir à sala",
         top: "60%",
         left: "70%",
-        next: "Exp_sala"
+        next: "Int_sala"
       },
       {
         label: "💻 Pc",
@@ -139,6 +139,21 @@ const story = {
         next: "Pegar_mala"
       }
     ]
+  },
+
+  Int_sala: {
+    speaker: "James",
+    background: "../cenarios/Sala.png",
+    text: [
+      { text: "Preciso fazer algo testando."}
+    ],
+    choices: [
+      { text: "Explorar",
+        next: "Exp_sala"
+    
+    }
+    ]
+
   },
 
   Pegar_mala: {
@@ -226,6 +241,19 @@ const story = {
         left: "40%",
         next: "Exp_quarto"
       }
+    ]
+  },
+
+  Exp_cozinha: {
+    type: "explore",
+    background: "../cenarios/Cozinha.png",
+    hotspots: [
+      {
+        label: "🚪 Voltar pra sala",
+        top: "90%",
+        left: "40%",
+        next: "Exp_sala"
+      },
     ]
   }
 };
