@@ -286,9 +286,9 @@ const story = {
       { text: "Prosseguir", next: "Exp_sala" }
     ]
   },
-  pegar_onibus: {
+  Pegar_onibus: {
     type: "explore",
-    background: null,
+    background: "../cenarios/paradaonibus.jpg",
     hotspots: [
       {
         label: "Conversar com Osvaldo",
