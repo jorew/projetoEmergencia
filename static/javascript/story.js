@@ -247,13 +247,53 @@ const story = {
   Exp_cozinha: {
     type: "explore",
     background: "../cenarios/Cozinha.png",
-    hotspots: [
+    characters: [
+      { id: "james", src: "../personagens/JamesAniston.png", position: "left" },
+      { id: "yohanna", src: "../personagens/YohannaVirada.png", position: "right" }
+    ],
+    text: [
       {
-        label: "🚪 Voltar pra sala",
-        top: "90%",
-        left: "40%",
-        next: "Exp_sala"
+        speaker: "James",
+        text: "Mãe, vou fazer uma viajem. Benção?",
+        emotion: "neutral",
+        activeChar: "james"
       },
+      {
+        speaker: "Mãe Yohanna",
+        text: "Filho, aonde você vai? ",
+        emotion: "neutral",
+        activeChar: "yohaana"
+      },
+      {
+        speaker: "James",
+        text: "Vou descansar a cabeça. Estou de férias e sinto necessidade. Não se preocupe ficartei bem.",
+        emotion: "neutral",
+        activeChar: "yohanna"
+      },
+      {
+        speaker: "Mãe Yohanna",
+        text: "Pois eu te abençoo. Vá em paz, e tome cuidado.",
+        emotion: "sad",
+        activeChar: "yohanna"
+      },
+      {
+        speaker: "James",
+        text: "Certo mãe tomarei. Tchau!",
+        emotion: "",
+        activeChar: "james"
+      }
+    ],
+    choices: [
+      { text: "Prosseguir", next: "Exp_sala" }
     ]
+  
+ //   hotspots: [
+ //     {
+ //       label: "🚪 Voltar pra sala",
+ //       top: "90%",
+ //       left: "40%",
+ //       next: "Exp_sala"
+//      },
+//    ]
   }
-};
+}
