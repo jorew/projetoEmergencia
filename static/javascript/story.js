@@ -145,7 +145,7 @@ const story = {
     speaker: "James",
     background: "../cenarios/Sala.png",
     text: [
-      { text: "Preciso fazer algo testando."}
+      { text: "Preciso me despedir de minha mãe."}
     ],
     choices: [
       { text: "Explorar",
@@ -226,7 +226,7 @@ const story = {
         label: "🚪 Ir à cozinha",
         top: "70%",
         left: "70%",
-        next: "Exp_cozinha"
+        next: "Conversa_cozinha"
       },
       {
         label: "🚪 Sair de casa",
@@ -244,8 +244,7 @@ const story = {
     ]
   },
 
-  Exp_cozinha: {
-    type: "explore",
+  Conversa_cozinha: {
     background: "../cenarios/Cozinha.png",
     characters: [
       { id: "james", src: "../personagens/JamesAniston.png", position: "left" },
@@ -279,21 +278,12 @@ const story = {
       {
         speaker: "James",
         text: "Certo mãe tomarei. Tchau!",
-        emotion: "",
+        emotion: "neutral",
         activeChar: "james"
       }
     ],
     choices: [
       { text: "Prosseguir", next: "Exp_sala" }
     ]
-  
- //   hotspots: [
- //     {
- //       label: "🚪 Voltar pra sala",
- //       top: "90%",
- //       left: "40%",
- //       next: "Exp_sala"
-//      },
-//    ]
   }
 }
