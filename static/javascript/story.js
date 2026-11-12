@@ -145,7 +145,7 @@ const story = {
     speaker: "James",
     background: "../cenarios/Sala.png",
     text: [
-      { text: "Preciso me despedir de minha mãe."}
+      { text: "Nossa, eu preciso me despedir de mamãe, nunca saí sem avisar pra ela."}
     ],
     choices: [
       { text: "Explorar",
@@ -160,7 +160,7 @@ const story = {
     speaker: "James",
     background: "../cenarios/Quarto.png",
     text: [
-      { text: "Ia me esquecendo da minha mala, preciso dela pra organizar minhas coisas." }
+      { text: "Já ia me esquecendo da mala, preciso dela pra organizar minhas coisas." }
     ],
     choices: [
       {
@@ -211,7 +211,7 @@ const story = {
     speaker: "James",
     background: "../cenarios/Quarto.png",
     text: [
-      { text: "Perfeito, a mala também está cheia, agora posso ir." }
+      { text: "Perfeito, a mala já está pronta, agora posso ir." }
     ],
     choices: [
       { text: "Voltar", next: "Exp_quarto" }
