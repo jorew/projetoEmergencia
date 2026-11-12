@@ -285,5 +285,30 @@ const story = {
     choices: [
       { text: "Prosseguir", next: "Exp_sala" }
     ]
-  }
+  },
+  pegar_onibus: {
+    type: "explore",
+    background: null,
+    hotspots: [
+      {
+        label: "Conversar com Osvaldo",
+        top: "70%",
+        left: "70%",
+        next: "chegada_onibus"
+      },
+      {
+        label: "Conversar com Júlio",
+        top: "50%",
+        left: "50%",
+        requires: "Mala_cheia",
+        next: "conversa_fiada1"
+      },
+      {
+        label: "Conversar com Vanessa",
+        top: "90%",
+        left: "40%",
+        next: "conversa_fiada2"
+      }
+    ]
+  },
 }
