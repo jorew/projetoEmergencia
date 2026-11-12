@@ -291,22 +291,22 @@ const story = {
     background: "../cenarios/paradaonibus.jpg",
     hotspots: [
       {
-        label: "Conversar com Osvaldo",
-        top: "70%",
-        left: "70%",
+        label: "Osvaldo",
+        top: "50%",
+        left: "50%",
         next: "chegada_onibus"
       },
       {
-        label: "Conversar com Júlio",
-        top: "50%",
-        left: "50%",
+        label: "Júlio",
+        top: "70%",
+        left: "70%",
         requires: "Mala_cheia",
         next: "conversa_fiada1"
       },
       {
-        label: "Conversar com Vanessa",
-        top: "90%",
-        left: "40%",
+        label: "Vanessa",
+        top: "80%",
+        left: "30%",
         next: "conversa_fiada2"
       }
     ]
