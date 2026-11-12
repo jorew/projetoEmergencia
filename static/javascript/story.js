@@ -4,7 +4,7 @@ const story = {
     background: "../cenarios/Cena1.png",
     character: null,
     text: [
-      { text: "Eu nunca entendi muito bem..." },
+      { text: "Eu nunca entendi muito bem...", audio: "../assets/audio/audio1.mp3" },
       { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família." },
       { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." },
       { text: "Eu sou filho único da família e favorito consequentemente... hihi ~" },
