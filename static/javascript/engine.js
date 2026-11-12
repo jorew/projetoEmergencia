@@ -493,7 +493,7 @@ function renderDialogue() {
   const currentSpeaker = typeof currentItem === 'object' && currentItem.speaker ? currentItem.speaker : (scene.speaker || "");
   const currentEmotion = typeof currentItem === 'object' && currentItem.emotion ? currentItem.emotion : (scene.emotion || 'neutral');
   const activeCharId = typeof currentItem === 'object' ? currentItem.activeChar : null;
-  const currentVoice = typeof currentItem === 'object' ? currentItem.voice : null;
+  const currentVoice = typeof currentItem === 'object' ? (currentItem.voice || currentItem.audio): null;
 
   if (currentVoice) {
     playVoice(currentVoice);

@@ -4,11 +4,11 @@ const story = {
     background: "../cenarios/Cena1.png",
     character: null,
     text: [
-      { text: "Eu nunca entendi muito bem...", audio: "../assets/audio/audio1.mp3" },
-      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família.", audio: "../assets/audio/audio2.mp3" },
-      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." , audio: "../assets/audio/audio3.mp3"},
-      { text: "Eu sou filho único da família e favorito consequentemente... hihi ", audio: "../assets/audio/audio4.mp3" },
-      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado.", audio: "../assets/audio/audio5.mp3" }
+      { text: "Eu nunca entendi muito bem...", voice: "../assets/audio/audio1.mp3" },
+      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família.", voice: "../assets/audio/audio2.mp3" },
+      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." , voice: "../assets/audio/audio3.mp3"},
+      { text: "Eu sou filho único da família e favorito consequentemente... hihi ", voice: "../assets/audio/audio4.mp3" },
+      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado.", voice: "../assets/audio/audio5.mp3" }
     ],
     choices: [
       { text: "Prosseguir", next: "certa_vez" }
