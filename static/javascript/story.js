@@ -338,7 +338,38 @@ const story = {
   
   Conversar_Raimundo:{
     background: "../cenarios/",
-   
+    characters: [
+      { id: "james", src: "../personagens/JamesAniston.png", position: "left" },
+    ],
+    text: [
+      {
+        speaker: "Julio",
+        text: "Oi. Gosta de manicraft?",
+        emotion: "neutral",
+        activeChar: "Julio"
+      },
+      {
+        speaker: "James",
+        text: "Conheço. Ei sua roupa é bonita!",
+        emotion: "neutral",
+        activeChar: "James"
+      },
+      {
+        speaker: "Julio",
+        text: "Obrigado. Sabia que a espada de diamante significa evolução, riqueza e preparo para enfrentar chefõezinhos?",
+        emotion: "neutral",
+        activeChar: "Julio"
+      },
+      {
+        speaker: "James",
+        text: "Nossa que legal...",
+        emotion: "neutral",
+        activeChar: "James"
+      },
+       choices: [
+        { text: "Prosseguir", next: "Pegar_onibus" }
+      ]
+    ]
   }
 
 
