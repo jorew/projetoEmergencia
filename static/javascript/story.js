@@ -4,11 +4,11 @@ const story = {
     background: "../cenarios/Cena1.png",
     character: null,
     text: [
-      { text: "Eu nunca entendi muito bem...", voice: "../assets/audio/audio1.mp3" },
-      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família.", voice: "../assets/audio/audio2.mp3" },
-      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." , voice: "../assets/audio/audio3.mp3"},
-      { text: "Eu sou filho único da família e favorito consequentemente... hihi ", voice: "../assets/audio/audio4.mp3" },
-      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado.", voice: "../assets/audio/audio5.mp3" }
+      { text: "Eu nunca entendi muito bem..." }, //1
+      { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família." }, //2
+      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." }, //3
+      { text: "Eu sou filho único da família e favorito consequentemente... hihi ~" }, //4
+      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado." } //5
     ],
     choices: [
       { text: "Prosseguir", next: "certa_vez" }
@@ -219,6 +219,7 @@ const story = {
   },
 
   Exp_sala: {
+    speaker: "James",
     type: "explore",
     background: "../cenarios/Sala.png",
     hotspots: [
@@ -261,7 +262,7 @@ const story = {
         speaker: "Mãe Yohanna",
         text: "Filho, aonde você vai? ",
         emotion: "neutral",
-        activeChar: "yohaana"
+        activeChar: "yohanna"
       },
       {
         speaker: "James",
@@ -272,7 +273,7 @@ const story = {
       {
         speaker: "Mãe Yohanna",
         text: "Pois eu te abençoo. Vá em paz, e tome cuidado.",
-        emotion: "sad",
+        emotion: "neutral",
         activeChar: "yohanna"
       },
       {
@@ -286,29 +287,46 @@ const story = {
       { text: "Prosseguir", next: "Exp_sala" }
     ]
   },
-  Pegar_onibus: {
-    type: "explore",
-    background: "../cenarios/paradaonibus.jpg",
+
+  Pegar_onibus:{
+ background: "../cenarios/paradaonibus.png",
     hotspots: [
       {
-        label: "Osvaldo",
-        top: "50%",
-        left: "50%",
-        next: "chegada_onibus"
-      },
-      {
-        label: "Júlio",
+        label: "Julio",
         top: "70%",
         left: "70%",
-        requires: "Mala_cheia",
-        next: "conversa_fiada1"
+        next: "Conversa_julio"
       },
       {
         label: "Vanessa",
-        top: "80%",
-        left: "30%",
-        next: "conversa_fiada2"
+        top: "50%",
+        left: "50%",
+        requires: "Mala_cheia",
+        next: "Conversar_vanessa"
+      },
+      {
+        label: "Raimundo",
+        top: "90%",
+        left: "40%",
+        next: "Conversar_Raimundo"
       }
     ]
   },
+
+  Conversar_julio:{
+    
+          
+  },
+
+  Conversar_julio:{
+
+  }, 
+  
+  Conversar_julio:{
+   
+  }
+
+
+
+
 }
