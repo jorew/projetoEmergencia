@@ -302,7 +302,8 @@ const story = {
  
 
   Pegar_onibus:{
- background: "../cenarios/paradaonibus.png",
+   type: "explore", 
+   background: "../cenarios/paradaonibus.png",
     hotspots: [
       {
         label: "Julio",
