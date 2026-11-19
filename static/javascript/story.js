@@ -309,13 +309,12 @@ const story = {
         label: "Julio",
         top: "70%",
         left: "70%",
-        next: "Conversa_Julio"
+        next: "Conversar_Julio"
       },
       {
         label: "Vanessa",
         top: "50%",
         left: "50%",
-        requires: "Mala_cheia",
         next: "Conversar_Vanessa"
       },
       {
@@ -328,14 +327,17 @@ const story = {
   },
 
   Conversar_Julio:{
+    background: "../cenarios/",
           
   },
 
   Conversar_Vanessa:{
+    background: "../cenarios/",
 
   }, 
   
   Conversar_Raimundo:{
+    background: "../cenarios/",
    
   }
 
