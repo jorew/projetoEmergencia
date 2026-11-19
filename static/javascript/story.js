@@ -244,6 +244,18 @@ const story = {
     ]
   },
 
+  termino_conv: {
+    speaker: "James",
+    background: "../cenarios/Sala.png",
+    text: [
+      { text: "Perfeito (...)" }
+    ],
+    choices: [
+      { text: "Voltar", next: "Exp_sala" }
+    ]
+
+  },
+
   Conversa_cozinha: {
     background: "../cenarios/Cozinha.png",
     characters: [
@@ -287,17 +299,7 @@ const story = {
     ]
   },
 
-  termino_conv: {
-    speaker: "James",
-    background: "../cenarios/Sala.png",
-    text: [
-      { text: "Perfeito (...)" }
-    ],
-    choices: [
-      { text: "Voltar", next: "Exp_sala" }
-    ]
-
-  },
+ 
 
   Pegar_onibus:{
  background: "../cenarios/paradaonibus.png",
