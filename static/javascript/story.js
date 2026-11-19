@@ -6,9 +6,9 @@ const story = {
     text: [
       { text: "Eu nunca entendi muito bem...", audio:"../assets/audio1.mp3" }, //1
       { text: "Mas, desde... muito pequeno, sentia algo estranho na minha própria família.", audio:"../assets/audio2.mp3"}, //2
-      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." , audio:"../assets/audio3.mp3", //3
+      { text: "Não sei como descrever, mas era como se meus pais... escondessem algo de mim." , audio:"../assets/audio3.mp3"}, //3
       { text: "Eu sou filho único da família e favorito consequentemente... hihi " , audio:"../assets/audio4.mp3"}, //4
-      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado.",, audio:"../assets/audio5.mp3"} //5
+      { text: "Por isso, eu sempre achei que era ilusão da minha cabeça e deixava esse detalhe de lado.",audio:"../assets/audio5.mp3"} //5
     ],
     choices: [
       { text: "Prosseguir", next: "certa_vez" }
@@ -22,10 +22,10 @@ const story = {
     text: [
       { text: "Mas teve uma certa vez que eu desci da minha cama no meio da madrugada,", audio:"../assets/audio6.mp3"},
       { text: "Escutei vozes abafadas quando cheguei perto da cozinha, a casa era grande.", audio:"../assets/audio7.mp3"},
-      { text: "Minha vó, meu avô, minha mãe e o meu pai estava conversando sobre a minha tia Ana." , audio:"../assets/audio8.mp3",
-      { text: "Eu escutei o choro baixo da minha mãe... e os outros familiares incluindo meu pai -" , audio:"../assets/audio9.mp3",
+      { text: "Minha vó, meu avô, minha mãe e o meu pai estava conversando sobre a minha tia Ana." , audio:"../assets/audio8.mp3"},
+      { text: "Eu escutei o choro baixo da minha mãe... e os outros familiares incluindo meu pai -" , audio:"../assets/audio9.mp3" },
       { text: "estavam apoiando ela como podiam... pensei comigo mesmo: 'não é a primeira vez que isso acontece'.", audio:"../assets/audio10.mp3"},
-      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto na mente." , audio:"../assets/audio11.mp3"
+      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto na mente." , audio:"../assets/audio11.mp3"},
     ],
     choices: [
       { text: "Prosseguir", next: "pergunta" }
@@ -365,11 +365,11 @@ const story = {
         text: "Nossa que legal...",
         emotion: "neutral",
         activeChar: "James"
-      },
-       choices:[
+      } ],
+      choices:[
         { text: "Prosseguir", next: "Pegar_onibus" }
        ]
-    ]
+    
   }
 
 
