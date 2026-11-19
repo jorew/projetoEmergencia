@@ -366,9 +366,9 @@ const story = {
         emotion: "neutral",
         activeChar: "James"
       },
-       choices: [
+       choices:[
         { text: "Prosseguir", next: "Pegar_onibus" }
-      ]
+       ]
     ]
   }
 
