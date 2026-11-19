@@ -303,20 +303,20 @@ const story = {
 
   Pegar_onibus:{
    type: "explore", 
-   background: "../cenarios/paradaonibus.png",
+   background: "../cenarios/paradaonibus.jpg",
     hotspots: [
       {
         label: "Julio",
         top: "70%",
         left: "70%",
-        next: "Conversa_julio"
+        next: "Conversa_Julio"
       },
       {
         label: "Vanessa",
         top: "50%",
         left: "50%",
         requires: "Mala_cheia",
-        next: "Conversar_vanessa"
+        next: "Conversar_Vanessa"
       },
       {
         label: "Raimundo",
@@ -327,16 +327,15 @@ const story = {
     ]
   },
 
-  Conversar_julio:{
-
+  Conversar_Julio:{
           
   },
 
-  Conversar_julio:{
+  Conversar_Vanessa:{
 
   }, 
   
-  Conversar_julio:{
+  Conversar_Raimundo:{
    
   }
 
