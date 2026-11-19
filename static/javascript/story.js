@@ -219,7 +219,6 @@ const story = {
   },
 
   Exp_sala: {
-    speaker: "James",
     type: "explore",
     background: "../cenarios/Sala.png",
     hotspots: [
@@ -284,8 +283,20 @@ const story = {
       }
     ],
     choices: [
-      { text: "Prosseguir", next: "Exp_sala" }
+      { text: "Prosseguir", next: "termino_conv" }
     ]
+  },
+
+  termino_conv: {
+    speaker: "James",
+    background: "../cenarios/Sala.png",
+    text: [
+      { text: "Perfeito (...)" }
+    ],
+    choices: [
+      { text: "Voltar", next: "Exp_sala" }
+    ]
+
   },
 
   Pegar_onibus:{
@@ -314,7 +325,7 @@ const story = {
   },
 
   Conversar_julio:{
-    
+
           
   },
 
