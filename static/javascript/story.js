@@ -102,8 +102,8 @@ const story = {
       { text: "Vou fazer rumo para Apókryphos Town" },
     ],
     choices: [
-      { text: "Explore", next: "Exp_quarto" }
-    ]
+      { text: "Explore", next: "Exp_quarto" },
+    ],
   },
 
   Exp_quarto: {
@@ -138,21 +138,21 @@ const story = {
         left: "10%",
         next: "Pegar_mala"
       }
-    ]
+    ],
   },
 
   Int_sala: {
     speaker: "James",
     background: "../cenarios/Sala.png",
     text: [
-      { text: "Nossa, eu preciso me despedir de mamãe, nunca saí sem avisar pra ela."}
+      { text: "Nossa, eu preciso me despedir de mamãe, nunca saí sem avisar pra ela."},
     ],
     choices: [
       { text: "Explorar",
         next: "Exp_sala"
     
     }
-    ]
+    ],
 
   },
 
