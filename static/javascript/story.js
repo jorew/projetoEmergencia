@@ -233,7 +233,7 @@ const story = {
         top: "50%",
         left: "50%",
         requires: "Mala_cheia",
-        next: "Pegar_onibus"
+        next: "Int_Pegar_onibus"
       },
       {
         label: "🚪 Voltar pro quarto",
@@ -299,6 +299,18 @@ const story = {
     ]
   },
 
+  Int_Pegar_onibus: {
+    speaker: "James",
+    background: "../cenarios/paradaonibus.jpg",
+    text: [
+      {text: "Finalmente, cheguei."}
+    ],
+    choices: [
+      {text: "Explorar", next: "Pegar_onibus"}
+    ]
+
+  },
+
  
 
   Pegar_onibus:{
@@ -327,12 +339,12 @@ const story = {
   },
 
   Conversar_Raimundo:{
-    background: "../cenarios/",
+    background: "../cenarios/paradaonibus.jpg",
           
   },
 
   Conversar_Vanessa:{
-    background: "../cenarios/",
+    background: "../cenarios/paradaonibus.jpg",
 
   }, 
   
@@ -394,12 +406,9 @@ const story = {
 
       }, ],
       choices:[
-        { text: "Prosseguir", next: "Pegar_onibus" }
+        { text: "Prosseguir", next: "Int_Pegar_onibus" }
        ]
     
-  }
-
-
-
+  },
 
 }
