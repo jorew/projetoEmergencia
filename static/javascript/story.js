@@ -68,7 +68,7 @@ const story = {
         text: "Para ser tão vitorioso quanto a sua tia Ana foi... só não se esqueça de ser feliz!",
         emotion: "sad",
         activeChar: "yohanna"
-      }
+      },
     ],
     choices: [
       { text: "Prosseguir", next: "estudo" }
@@ -83,7 +83,7 @@ const story = {
       { text: "Desde então, eu tenho focado muito nos estudos, sem esquecer de ser feliz.", activeChar: "james" },
       { text: "Descobri um tempo depois que a tia Ana participava de uma banda -", activeChar: "james" },
       { text: "conhecida como Banda Amadeira, tinha ganhado muita popularidade ultimamente. Mas que estranho, fiquei sabendo que todos os membros faleceram em um acidente.", activeChar: "james" },
-      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa...", activeChar: "james" }
+      { text: "Tal ocorrido, não é muito bem explicado pela produtora da banda - aí tem coisa...", activeChar: "james" },
     ],
     choices: [
       { text: "Prosseguir", next: "noticia" }
@@ -99,7 +99,7 @@ const story = {
       { text: "Vendo algumas notícias, percebi que a banda atuava numa cidade conhecida por desaparecimentos repentinos, Apókryphos Town." },
       { text: "Perguntei pra minha mãe sobre, mas ela nunca fala nada a respeito. Se eu falar com qualquer outro familiar? Dá na mesma." },
       { text: "Bem, estou de férias... tenho um bom dinheiro guardado... posso fazer uma viagem para descobrir mais sobre a Banda Amadeira. Como estou de férias acho que posso dar uma passada para entender tudo isso." },
-      { text: "Vou fazer rumo para Apókryphos Town" }
+      { text: "Vou fazer rumo para Apókryphos Town" },
     ],
     choices: [
       { text: "Explore", next: "Exp_quarto" }
