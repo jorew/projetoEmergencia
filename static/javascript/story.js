@@ -326,7 +326,7 @@ const story = {
     ]
   },
 
-  Conversar_Julio:{
+  Conversar_Raimundo:{
     background: "../cenarios/",
           
   },
@@ -336,10 +336,11 @@ const story = {
 
   }, 
   
-  Conversar_Raimundo:{
+  Conversar_Julio:{
     background: "../cenarios/",
     characters: [
-      { id: "james", src: "../personagens/JamesAniston.png", position: "left" },
+      { id: "James", src: "../personagens/JamesAniston.png", position: "left" },
+      { id: "Julio", srx="../personagens/Julio.png", position: "right"},
     ],
     text: [
       {
@@ -356,16 +357,44 @@ const story = {
       },
       {
         speaker: "Julio",
-        text: "Obrigado. Sabia que a espada de diamante significa evolução, riqueza e preparo para enfrentar chefõezinhos?",
+        text: "Obrigado. Sabia que a espada de diamante significa evolução?",
         emotion: "neutral",
         activeChar: "Julio"
       },
       {
+        speaker: "Julio",
+        text: "É uma grande marca da disciplina de um jogador, conseguir uma sem usar trapaça é bem difícil, diamantes são raros hehe.",
+        emotion: "happy",
+        activeChar: "Julio"
+
+
+      },
+      {
         speaker: "James",
-        text: "Nossa que legal...",
-        emotion: "neutral",
+        text: "Nossa que legal... mas você já conseguiu?",
+        emotion: "happy",
         activeChar: "James"
-      } ],
+      },
+      {
+        speaker: "Julio",
+        text: "Não vou negar, o meu sonho sempre foi ter uma de verdade. Mas só ter por ter, não faz muito sentido...",
+        activeChar: "Julio",
+        emotion: "happy",
+      },
+      {
+        speaker: "Julio",
+        text: "Essa espada é muito usada pra zerar o jogo, mas eu ainda não me sinto realizado pra zerar o jogo.",
+        activeChar: "Julio",
+      },
+      {
+        speaker: "Julio",
+        text: "Eu prefiro construir o meu mundo primeiro, me realizar com ele antes de ir pro fim!",
+        activeChar: "Julio",
+        emotion: "happy",
+
+      }
+    
+    ],
       choices:[
         { text: "Prosseguir", next: "Pegar_onibus" }
        ]
