@@ -392,9 +392,7 @@ const story = {
         activeChar: "Julio",
         emotion: "happy",
 
-      }
-    
-    ],
+      }, ],
       choices:[
         { text: "Prosseguir", next: "Pegar_onibus" }
        ]
