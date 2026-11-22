@@ -358,6 +358,7 @@ const story = {
       {
         speaker: "Julio",
         text: "Oi. Gosta de manicraft?",
+        audio: "../assets/audio/Julio/Julio1.mp3",
         emotion: "neutral",
         activeChar: "Julio"
       },
@@ -370,12 +371,14 @@ const story = {
       {
         speaker: "Julio",
         text: "Obrigado. Sabia que a espada de diamante significa evolução?",
+        audio: "../assets/audio/Julio/Julio2.mp3",
         emotion: "neutral",
         activeChar: "Julio"
       },
       {
         speaker: "Julio",
         text: "É uma grande marca da disciplina de um jogador, conseguir uma sem usar trapaça é bem difícil, diamantes são raros hehe.",
+        audio: "../assets/audio/Julio/Julio3.mp3",
         emotion: "happy",
         activeChar: "Julio"
 
@@ -390,17 +393,20 @@ const story = {
       {
         speaker: "Julio",
         text: "Não vou negar, o meu sonho sempre foi ter uma de verdade. Mas só ter por ter, não faz muito sentido...",
+        audio: "../assets/audio/Julio/Julio4.mp3",
         activeChar: "Julio",
         emotion: "happy",
       },
       {
         speaker: "Julio",
         text: "Essa espada é muito usada pra zerar o jogo, mas eu ainda não me sinto realizado pra zerar o jogo.",
+        audio: "../assets/audio/Julio/Julio5.mp3",
         activeChar: "Julio",
       },
       {
         speaker: "Julio",
         text: "Eu prefiro construir o meu mundo primeiro, me realizar com ele antes de ir pro fim!",
+        audio: "../assets/audio/Julio/Julio6.mp3",
         activeChar: "Julio",
         emotion: "happy",
 
