@@ -337,7 +337,7 @@ const story = {
   }, 
   
   Conversar_Julio:{
-    background: "../cenarios/",
+    background: "../cenarios/paradaonibus.jpg",
     characters: [
       { id: "James", src: "../personagens/JamesAniston.png", position: "left" },
       { id: "Julio", srx="../personagens/Julio.png", position: "right"},
