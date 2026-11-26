@@ -22,10 +22,10 @@ const story = {
     text: [
       { text: "Mas teve uma certa vez que eu desci da minha cama no meio da madrugada,", audio:"../assets/audio/audio6.mp3"},
       { text: "Escutei vozes abafadas quando cheguei perto da cozinha, a casa era grande.", audio:"../assets/audio/audio7.mp3"},
-      { text: "Minha vó, meu avô, minha mãe e o meu pai estava conversando sobre a minha tia Ana." , audio:"../assets/audio/audio8.mp3"},
+      { text: "Minha vó, meu avô, minha mãe e o meu pai estavam conversando sobre a minha tia Ana." , audio:"../assets/audio/audio8.mp3"},
       { text: "Eu escutei o choro baixo da minha mãe... e os outros familiares incluindo meu pai -" , audio:"../assets/audio/audio9.mp3" },
       { text: "estavam apoiando ela como podiam... pensei comigo mesmo: 'não é a primeira vez que isso acontece'.", audio:"../assets/audio/audio10.mp3"},
-      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto na mente." , audio:"../assets/audio/audio11.mp3"},
+      { text: "Eu era pequeno, sempre que escutava mamãe chorar eu corria direto pro quarto e dormia ouvindo o seu pranto." , audio:"../assets/audio/audio11.mp3"},
     ],
     choices: [
       { text: "Prosseguir", next: "pergunta" }
